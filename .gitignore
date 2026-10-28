@@ -1,0 +1,15 @@
+# simulation
+tb/sim_build/
+tb/results.xml
+tb/__pycache__/
+*.vcd
+*.fst
+# formal work dirs
+formal/pwm_deadtime_*/
+formal/pwm3_top_*/
+# flow runs (large); curated reports are copied to results/
+flow/runs/
+# editors / OS
+.vscode/
+*.swp
+Thumbs.db
