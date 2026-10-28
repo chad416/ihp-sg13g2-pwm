@@ -32,6 +32,7 @@ sim:
 	$(MAKE) -C tb SIM=icarus 2>&1 | tee $(RES)/sim/cocotb.log
 	@cp tb/results.xml $(RES)/sim/results.xml
 	@python3 scripts/check_junit.py $(RES)/sim/results.xml | tee $(RES)/sim/summary.txt
+	bash scripts/sim_mutants.sh
 
 formal:
 	@mkdir -p $(RES)/formal
