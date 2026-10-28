@@ -1,0 +1,10 @@
+PASS  test_reset_and_id            sim_time=? ns  wall=0.2 s
+PASS  test_register_access         sim_time=? ns  wall=2.8 s
+PASS  test_basic_pwm               sim_time=? ns  wall=0.6 s
+PASS  test_shadow_and_hold         sim_time=? ns  wall=1.6 s
+PASS  test_fault                   sim_time=? ns  wall=0.9 s
+PASS  test_edge_cases              sim_time=? ns  wall=8.8 s
+PASS  test_random                  sim_time=? ns  wall=91.2 s
+PASS  test_zz_coverage_closure     sim_time=? ns  wall=0.3 s
+
+8/8 tests passed

@@ -1,0 +1,53 @@
+Functional coverage report (pwm3_top)
+======================================
+
+[period]
+  HIT  0                                                    1
+  HIT  1                                                    2
+  HIT  2-15                                                34
+  HIT  16-255                                              44
+  HIT  256-4095                                            48
+  HIT  >=4096                                               1
+
+[duty]
+  HIT  0%                                                  88
+  HIT  (0,25%]                                             32
+  HIT  (25,50%]                                            48
+  HIT  (50,75%]                                            41
+  HIT  (75,100%)                                           37
+  HIT  100%                                               144
+
+[deadtime]
+  HIT  0 (clamped)                                         26
+  HIT  1                                                   31
+  HIT  2-15                                                35
+  HIT  16-255                                              36
+  HIT  256-1022                                             1
+  HIT  1023                                                 1
+
+[event]
+  HIT  handover low->high                                4367
+  HIT  handover high->low                                5037
+  HIT  pulse swallowed by dead time                       988
+  HIT  fault while high side on                            23
+  HIT  fault while low side on                             19
+  HIT  fault during dead time                               6
+  HIT  fault clear blocked (fault still active)             1
+  HIT  fault cleared by software                           26
+  HIT  atomic update with HOLD                             47
+  HIT  compare update while running                        75
+  HIT  counter disabled while running                       6
+  HIT  spi frame aborted                                    1
+
+[spi_read]
+  HIT  0x0                                                  6
+  HIT  0x1                                                  7
+  HIT  0x2                                                  4
+  HIT  0x3                                                  5
+  HIT  0x4                                                  4
+  HIT  0x5                                                  4
+  HIT  0x6                                                  5
+  HIT  0x7                                                  7
+  HIT  0xF                                                  2
+
+Bins covered: 39/39 (100.0 %)
