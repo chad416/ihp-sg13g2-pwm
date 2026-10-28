@@ -1,5 +1,7 @@
-make[1]: Entering directory '/foss/designs/pwm3/tb'
+make[1]: Entering directory '/tmp/clone/tb'
 rm -f results.xml
+mkdir -p sim_build
+/foss/tools/bin/iverilog -o sim_build/sim.vvp -s pwm3_top -g2012 -g2012 -Wall -f sim_build/cmds.f  /tmp/clone/rtl/pwm_sync2.v /tmp/clone/rtl/pwm_spi_slave.v /tmp/clone/rtl/pwm_regs.v /tmp/clone/rtl/pwm_timebase.v /tmp/clone/rtl/pwm_deadtime.v /tmp/clone/rtl/pwm3_top.v
 rm -f results.xml
 COCOTB_TEST_MODULES=test_pwm3 COCOTB_TESTCASE=  COCOTB_TOPLEVEL=pwm3_top TOPLEVEL_LANG=verilog       \
 	 /foss/tools/bin/vvp -m /usr/local/lib/python3.12/dist-packages/cocotb/libs/libcocotbvpi_icarus.so   sim_build/sim.vvp -none  
@@ -7,7 +9,7 @@ COCOTB_TEST_MODULES=test_pwm3 COCOTB_TESTCASE=  COCOTB_TOPLEVEL=pwm3_top TOPLEVE
      -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:233  in gpi_load_users                  Running entry func 'initialize' from loaded library '/usr/local/lib/python3.12/dist-packages/cocotb/simulator.cpython-312-x86_64-linux-gnu.so'
      -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:114  in initialize                      Using Python 3.12.12 interpreter at /usr/bin/python3
      -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
-     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1793230192
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1793230674
      0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /usr/local/lib/python3.12/dist-packages/cocotb
      0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 14.0 (devel)
      0.00ns INFO     cocotb.regression                  Running tests
@@ -102,15 +104,15 @@ COCOTB_TEST_MODULES=test_pwm3 COCOTB_TESTCASE=  COCOTB_TOPLEVEL=pwm3_top TOPLEVE
 3762660.01ns INFO     cocotb.regression                  ********************************************************************************************
                                                         ** TEST                                STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
                                                         ********************************************************************************************
-                                                        ** test_pwm3.test_reset_and_id          PASS       10125.00           0.12      82349.11  **
-                                                        ** test_pwm3.test_register_access       PASS      125185.00           1.80      69468.03  **
-                                                        ** test_pwm3.test_basic_pwm             PASS       25050.00           0.32      79384.93  **
-                                                        ** test_pwm3.test_shadow_and_hold       PASS       68680.00           0.85      80840.52  **
-                                                        ** test_pwm3.test_fault                 PASS       39520.00           0.65      61205.67  **
-                                                        ** test_pwm3.test_edge_cases            PASS      364020.00           4.72      77176.07  **
-                                                        ** test_pwm3.test_random                PASS     3130080.00          43.63      71746.42  **
-                                                        ** test_pwm3.test_zz_coverage_closure   PASS           0.00           0.01          0.00  **
+                                                        ** test_pwm3.test_reset_and_id          PASS       10125.00           0.07     136782.49  **
+                                                        ** test_pwm3.test_register_access       PASS      125185.00           0.73     171114.76  **
+                                                        ** test_pwm3.test_basic_pwm             PASS       25050.00           0.14     173173.89  **
+                                                        ** test_pwm3.test_shadow_and_hold       PASS       68680.00           0.46     149034.28  **
+                                                        ** test_pwm3.test_fault                 PASS       39520.00           0.24     162990.37  **
+                                                        ** test_pwm3.test_edge_cases            PASS      364020.00           2.23     163592.44  **
+                                                        ** test_pwm3.test_random                PASS     3130080.00          19.12     163710.32  **
+                                                        ** test_pwm3.test_zz_coverage_closure   PASS           0.00           0.00          0.00  **
                                                         ********************************************************************************************
-                                                        ** TESTS=8 PASS=8 FAIL=0 SKIP=0                  3762660.01          52.10      72224.25  **
+                                                        ** TESTS=8 PASS=8 FAIL=0 SKIP=0                  3762660.01          23.00     163582.40  **
                                                         ********************************************************************************************
-make[1]: Leaving directory '/foss/designs/pwm3/tb'
+make[1]: Leaving directory '/tmp/clone/tb'

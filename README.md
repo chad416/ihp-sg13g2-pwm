@@ -249,8 +249,17 @@ scripts/run_all.sh            # Linux/macOS: lint, sim, formal, full RTL-to-GDS 
 powershell -ExecutionPolicy Bypass -File scripts/run_all.ps1      # Windows (Docker Desktop)
 ```
 
-Single steps: `scripts/run_all.sh lint|sim|formal|flow|results`. Runtimes on a 16-thread
-laptop: RUNTIMES
+Single steps: `scripts/run_all.sh lint|sim|formal|flow|results`.
+
+**Reproducibility check.** A fresh `git clone` of this repository ran `make all` inside the
+container with exit code 0 in **430 s** wall time, on a 16-thread laptop under Docker
+Desktop/WSL2 with the image already pulled. The LibreLane flow took 334 s of that. The
+regenerated implementation summary, the formal summary and both mutation tables were
+byte-identical to the committed ones, and so were the simulation results (8/8 tests,
+376,221 compared cycles, 39/39 coverage bins). Expect the first run after pulling the
+image to be slower, because of cold disk caches. Exact tool versions:
+[results/tool_versions.txt](results/tool_versions.txt) (IHP-Open-PDK commit
+`a49358cc`).
 
 ## Repository layout
 

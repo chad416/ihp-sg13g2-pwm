@@ -1,176 +1,176 @@
-SBY 23:29:40 [pwm3_top_prove] Removing directory '/foss/designs/pwm3/formal/pwm3_top_prove'.
-SBY 23:29:41 [pwm3_top_cover] Removing directory '/foss/designs/pwm3/formal/pwm3_top_cover'.
-SBY 23:29:41 [pwm3_top_bmc_dt2] Removing directory '/foss/designs/pwm3/formal/pwm3_top_bmc_dt2'.
-SBY 23:29:41 [pwm3_top_bmc_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm_sync2.v' to '/foss/designs/pwm3/formal/pwm3_top_bmc_dt2/src/pwm_sync2.v'.
-SBY 23:29:41 [pwm3_top_bmc_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm_spi_slave.v' to '/foss/designs/pwm3/formal/pwm3_top_bmc_dt2/src/pwm_spi_slave.v'.
-SBY 23:29:41 [pwm3_top_bmc_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm_regs.v' to '/foss/designs/pwm3/formal/pwm3_top_bmc_dt2/src/pwm_regs.v'.
-SBY 23:29:41 [pwm3_top_bmc_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm_timebase.v' to '/foss/designs/pwm3/formal/pwm3_top_bmc_dt2/src/pwm_timebase.v'.
-SBY 23:29:41 [pwm3_top_bmc_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm_deadtime.v' to '/foss/designs/pwm3/formal/pwm3_top_bmc_dt2/src/pwm_deadtime.v'.
-SBY 23:29:41 [pwm3_top_bmc_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm3_top.v' to '/foss/designs/pwm3/formal/pwm3_top_bmc_dt2/src/pwm3_top.v'.
-SBY 23:29:41 [pwm3_top_bmc_dt2] engine_0: smtbmc yices
-SBY 23:29:41 [pwm3_top_bmc_dt2] base: starting process "cd pwm3_top_bmc_dt2/src; yosys -ql ../model/design.log ../model/design.ys"
-SBY 23:29:42 [pwm3_top_bmc_dt2] base: finished (returncode=0)
-SBY 23:29:42 [pwm3_top_bmc_dt2] prep: starting process "cd pwm3_top_bmc_dt2/model; yosys -ql design_prep.log design_prep.ys"
-SBY 23:29:42 [pwm3_top_bmc_dt2] prep: finished (returncode=0)
-SBY 23:29:42 [pwm3_top_bmc_dt2] smt2: starting process "cd pwm3_top_bmc_dt2/model; yosys -ql design_smt2.log design_smt2.ys"
-SBY 23:29:42 [pwm3_top_bmc_dt2] smt2: finished (returncode=0)
-SBY 23:29:42 [pwm3_top_bmc_dt2] engine_0: starting process "cd pwm3_top_bmc_dt2; yosys-smtbmc -s yices --presat --unroll --noprogress -t 75  --append 0 --dump-vcd engine_0/trace.vcd --dump-yw engine_0/trace.yw --dump-vlogtb engine_0/trace_tb.v --dump-smtc engine_0/trace.smtc model/design_smt2.smt2"
-SBY 23:29:43 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Solver: yices
-SBY 23:29:44 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 0..
-SBY 23:29:44 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 0..
-SBY 23:29:44 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 1..
-SBY 23:29:44 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 1..
-SBY 23:29:44 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 2..
-SBY 23:29:44 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 2..
-SBY 23:29:44 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 3..
-SBY 23:29:44 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 3..
-SBY 23:29:44 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 4..
-SBY 23:29:44 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 4..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 5..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 5..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 6..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 6..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 7..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 7..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 8..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 8..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 9..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 9..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 10..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 10..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 11..
-SBY 23:29:45 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 11..
-SBY 23:29:46 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 12..
-SBY 23:29:46 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 12..
-SBY 23:29:46 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 13..
-SBY 23:29:46 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 13..
-SBY 23:29:46 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 14..
-SBY 23:29:46 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 14..
-SBY 23:29:46 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 15..
-SBY 23:29:46 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 15..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 16..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 16..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 17..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 17..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 18..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 18..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 19..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 19..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 20..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 20..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 21..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 21..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 22..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 22..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 23..
-SBY 23:29:47 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 23..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 24..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 24..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 25..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 25..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 26..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 26..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 27..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 27..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 28..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 28..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 29..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 29..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 30..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 30..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 31..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 31..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 32..
-SBY 23:29:48 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 32..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 33..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 33..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 34..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 34..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 35..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 35..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 36..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 36..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 37..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 37..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 38..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 38..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 39..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 39..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 40..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 40..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 41..
-SBY 23:29:49 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 41..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 42..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 42..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 43..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 43..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 44..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 44..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 45..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 45..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 46..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 46..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 47..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 47..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 48..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 48..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 49..
-SBY 23:29:50 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 49..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 50..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 50..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 51..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 51..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 52..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 52..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 53..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 53..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 54..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 54..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assumptions in step 55..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 55..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assumptions in step 56..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 56..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assumptions in step 57..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 57..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assumptions in step 58..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 58..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assumptions in step 59..
-SBY 23:29:51 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 59..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assumptions in step 60..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 60..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assumptions in step 61..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 61..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assumptions in step 62..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 62..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assumptions in step 63..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 63..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assumptions in step 64..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:03  Checking assertions in step 64..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assumptions in step 65..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assertions in step 65..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assumptions in step 66..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assertions in step 66..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assumptions in step 67..
-SBY 23:29:52 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assertions in step 67..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assumptions in step 68..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assertions in step 68..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assumptions in step 69..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assertions in step 69..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assumptions in step 70..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assertions in step 70..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assumptions in step 71..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assertions in step 71..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assumptions in step 72..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:04  Checking assertions in step 72..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:05  Checking assumptions in step 73..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:05  Checking assertions in step 73..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:05  Checking assumptions in step 74..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:05  Checking assertions in step 74..
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: ##   0:00:05  Status: passed
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: finished (returncode=0)
-SBY 23:29:53 [pwm3_top_bmc_dt2] engine_0: Status returned by engine: pass
-SBY 23:29:53 [pwm3_top_bmc_dt2] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:12 (12)
-SBY 23:29:53 [pwm3_top_bmc_dt2] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:08 (8)
-SBY 23:29:53 [pwm3_top_bmc_dt2] summary: engine_0 (smtbmc yices) returned pass
-SBY 23:29:53 [pwm3_top_bmc_dt2] summary: engine_0 did not produce any traces
-SBY 23:29:53 [pwm3_top_bmc_dt2] DONE (PASS, rc=0)
+SBY  0:39:06 [pwm3_top_prove] Removing directory '/tmp/clone/formal/pwm3_top_prove'.
+SBY  0:39:06 [pwm3_top_cover] Removing directory '/tmp/clone/formal/pwm3_top_cover'.
+SBY  0:39:06 [pwm3_top_bmc_dt2] Removing directory '/tmp/clone/formal/pwm3_top_bmc_dt2'.
+SBY  0:39:06 [pwm3_top_bmc_dt2] Copy '/tmp/clone/formal/../rtl/pwm_sync2.v' to '/tmp/clone/formal/pwm3_top_bmc_dt2/src/pwm_sync2.v'.
+SBY  0:39:06 [pwm3_top_bmc_dt2] Copy '/tmp/clone/formal/../rtl/pwm_spi_slave.v' to '/tmp/clone/formal/pwm3_top_bmc_dt2/src/pwm_spi_slave.v'.
+SBY  0:39:06 [pwm3_top_bmc_dt2] Copy '/tmp/clone/formal/../rtl/pwm_regs.v' to '/tmp/clone/formal/pwm3_top_bmc_dt2/src/pwm_regs.v'.
+SBY  0:39:06 [pwm3_top_bmc_dt2] Copy '/tmp/clone/formal/../rtl/pwm_timebase.v' to '/tmp/clone/formal/pwm3_top_bmc_dt2/src/pwm_timebase.v'.
+SBY  0:39:06 [pwm3_top_bmc_dt2] Copy '/tmp/clone/formal/../rtl/pwm_deadtime.v' to '/tmp/clone/formal/pwm3_top_bmc_dt2/src/pwm_deadtime.v'.
+SBY  0:39:06 [pwm3_top_bmc_dt2] Copy '/tmp/clone/formal/../rtl/pwm3_top.v' to '/tmp/clone/formal/pwm3_top_bmc_dt2/src/pwm3_top.v'.
+SBY  0:39:06 [pwm3_top_bmc_dt2] engine_0: smtbmc yices
+SBY  0:39:06 [pwm3_top_bmc_dt2] base: starting process "cd pwm3_top_bmc_dt2/src; yosys -ql ../model/design.log ../model/design.ys"
+SBY  0:39:07 [pwm3_top_bmc_dt2] base: finished (returncode=0)
+SBY  0:39:07 [pwm3_top_bmc_dt2] prep: starting process "cd pwm3_top_bmc_dt2/model; yosys -ql design_prep.log design_prep.ys"
+SBY  0:39:07 [pwm3_top_bmc_dt2] prep: finished (returncode=0)
+SBY  0:39:07 [pwm3_top_bmc_dt2] smt2: starting process "cd pwm3_top_bmc_dt2/model; yosys -ql design_smt2.log design_smt2.ys"
+SBY  0:39:07 [pwm3_top_bmc_dt2] smt2: finished (returncode=0)
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: starting process "cd pwm3_top_bmc_dt2; yosys-smtbmc -s yices --presat --unroll --noprogress -t 75  --append 0 --dump-vcd engine_0/trace.vcd --dump-yw engine_0/trace.yw --dump-vlogtb engine_0/trace_tb.v --dump-smtc engine_0/trace.smtc model/design_smt2.smt2"
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Solver: yices
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 0..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 0..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 1..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 1..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 2..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 2..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 3..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 3..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 4..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 4..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 5..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 5..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 6..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 6..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 7..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 7..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 8..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 8..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 9..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 9..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 10..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 10..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 11..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 11..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 12..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 12..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 13..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 13..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 14..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 14..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 15..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 15..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 16..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 16..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 17..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 17..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 18..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 18..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 19..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 19..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 20..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 20..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 21..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 21..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 22..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 22..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 23..
+SBY  0:39:08 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 23..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 24..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 24..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 25..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 25..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 26..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 26..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 27..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 27..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 28..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 28..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 29..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 29..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 30..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 30..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 31..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 31..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 32..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 32..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 33..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 33..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 34..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 34..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 35..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 35..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 36..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 36..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 37..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 37..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 38..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 38..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 39..
+SBY  0:39:09 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 39..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 40..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 40..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 41..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 41..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assumptions in step 42..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:00  Checking assertions in step 42..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 43..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 43..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 44..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 44..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 45..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 45..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 46..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 46..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 47..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 47..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 48..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 48..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 49..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 49..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 50..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 50..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 51..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 51..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 52..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 52..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 53..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 53..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 54..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 54..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 55..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 55..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 56..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 56..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 57..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 57..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 58..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 58..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 59..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 59..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 60..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 60..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 61..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 61..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 62..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 62..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 63..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 63..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 64..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 64..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 65..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 65..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 66..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 66..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 67..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 67..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 68..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 68..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assumptions in step 69..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:01  Checking assertions in step 69..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 70..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 70..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 71..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 71..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 72..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 72..
+SBY  0:39:10 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 73..
+SBY  0:39:11 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 73..
+SBY  0:39:11 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assumptions in step 74..
+SBY  0:39:11 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Checking assertions in step 74..
+SBY  0:39:11 [pwm3_top_bmc_dt2] engine_0: ##   0:00:02  Status: passed
+SBY  0:39:11 [pwm3_top_bmc_dt2] engine_0: finished (returncode=0)
+SBY  0:39:11 [pwm3_top_bmc_dt2] engine_0: Status returned by engine: pass
+SBY  0:39:11 [pwm3_top_bmc_dt2] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:04 (4)
+SBY  0:39:11 [pwm3_top_bmc_dt2] summary: Elapsed process time [H:MM:SS (secs)]: 0:00:05 (5)
+SBY  0:39:11 [pwm3_top_bmc_dt2] summary: engine_0 (smtbmc yices) returned pass
+SBY  0:39:11 [pwm3_top_bmc_dt2] summary: engine_0 did not produce any traces
+SBY  0:39:11 [pwm3_top_bmc_dt2] DONE (PASS, rc=0)
