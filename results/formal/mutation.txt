@@ -1,0 +1,8 @@
+ID   Mutation                                           Check                  Result
+M1   no dead-time wait (only 1 off cycle)               pwm_deadtime:prove     killed (check FAILS as expected)
+M2   high side on at once, low side kept on (overlap)   pwm_deadtime:prove     killed (check FAILS as expected)
+M3   dead time one cycle short                          pwm_deadtime:prove     killed (check FAILS as expected)
+M4   safe request ignored by dead-time unit             pwm3_top:bmc_dt2       killed (check FAILS as expected)
+M5   fault path one cycle slower (latch only)           pwm3_top:bmc_dt2       killed (check FAILS as expected)
+M6   fault never latched                                pwm3_top:bmc_dt2       killed (check FAILS as expected)
+M7   CTRL decoded at wrong address (FCLR path)          pwm3_top:bmc_dt2       killed (check FAILS as expected)

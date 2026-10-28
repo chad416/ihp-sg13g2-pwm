@@ -1,0 +1,43 @@
+# Top-level proof of the complete design. SPI pins, fault_i and rst_ni are free
+# inputs, so the safety properties hold for any register programming.
+# prove:   unbounded (k-induction): no-overlap and dead time on all three phases
+#          (asserted inside pwm_deadtime), fault latency N = 3, a tripped fault
+#          and OUTEN=0 keep all outputs off. Default parameters (DT_W = 10).
+# cover:   a real SPI write frame and a software fault clear are reachable.
+# bmc_dt2: deep bounded check (75 cycles) with DT_W = 2, so that the reset dead
+#          time is 3 cycles instead of 1023 and the outputs actually switch
+#          within the bound, including after an SPI write of OUTEN. Used by the
+#          mutation check (scripts/formal_mutants.sh) to show the top-level
+#          properties catch real bugs.
+
+[tasks]
+prove
+cover
+bmc_dt2
+
+[options]
+prove: mode prove
+prove: depth 8
+cover: mode cover
+cover: depth 90
+bmc_dt2: mode bmc
+bmc_dt2: depth 75
+
+[engines]
+smtbmc yices
+
+[script]
+read_verilog -formal pwm_sync2.v pwm_spi_slave.v pwm_regs.v pwm_timebase.v pwm_deadtime.v pwm3_top.v
+bmc_dt2: chparam -set DT_W 2 pwm3_top
+prep -top pwm3_top
+# The dead-time unit's own covers need several SPI writes to reach at top level;
+# they are already reached in pwm_deadtime.sby.
+cover: chformal -cover -remove *pwm_deadtime*
+
+[files]
+../rtl/pwm_sync2.v
+../rtl/pwm_spi_slave.v
+../rtl/pwm_regs.v
+../rtl/pwm_timebase.v
+../rtl/pwm_deadtime.v
+../rtl/pwm3_top.v

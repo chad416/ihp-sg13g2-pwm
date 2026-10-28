@@ -1,0 +1,5 @@
+pwm_deadtime_prove     PASS
+pwm_deadtime_cover     PASS
+pwm3_top_prove         PASS
+pwm3_top_cover         PASS
+pwm3_top_bmc_dt2       PASS

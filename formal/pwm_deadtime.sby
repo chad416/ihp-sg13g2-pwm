@@ -1,0 +1,23 @@
+# Module-level proof of the dead-time unit with fully unconstrained inputs.
+# prove: unbounded (k-induction) proof of P1 no-overlap, P2 dead time, P3 safe.
+# cover: the hand-over in both directions is reachable with DT = 3.
+
+[tasks]
+prove
+cover
+
+[options]
+prove: mode prove
+prove: depth 6
+cover: mode cover
+cover: depth 16
+
+[engines]
+smtbmc yices
+
+[script]
+read_verilog -formal pwm_deadtime.v
+prep -top pwm_deadtime
+
+[files]
+../rtl/pwm_deadtime.v
