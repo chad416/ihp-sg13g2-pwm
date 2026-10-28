@@ -23,5 +23,6 @@ WAVES ?= 0
 export PWM3_SEED ?= 20261028
 export PWM3_RANDOM_CFGS ?= 120
 export PWM3_COV_REPORT ?= $(abspath ../results/sim/coverage_report.txt)
+export PWM3_TRACE_DIR ?= $(abspath ../results/sim/traces)
 
 include $(shell cocotb-config --makefiles)/Makefile.sim

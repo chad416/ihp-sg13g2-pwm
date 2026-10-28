@@ -155,6 +155,7 @@ class Scoreboard:
         self.ref_last = [0, 0, 0]
         self.run_saw_h = [False, False, False]
         self.run_tainted = [False, False, False]
+        self.trace: list[tuple[int, ...]] = []  # per-cycle pin record for figures
         self._task = None
 
     def _pins(self) -> tuple[int, int]:
@@ -197,6 +198,7 @@ class Scoreboard:
             h = [(h_v >> i) & 1 for i in range(3)]
             l = [(l_v >> i) & 1 for i in range(3)]
             sync = int(dut.sync_o.value)
+            self.trace.append((self.cycles, int(dut.u_tb.cnt_o.value), *h, *l, sync, pins[1]))
 
             # 1. model comparison (all outputs, every cycle)
             if tuple(h) != exp.h or tuple(l) != exp.l or sync != exp.sync:
@@ -245,6 +247,15 @@ async def start(dut) -> tuple[SpiMaster, Scoreboard]:
     dut.rst_ni.value = 1
     await ClockCycles(dut.clk_i, 4)
     return spi, sb
+
+
+def save_trace(sb: Scoreboard, name: str, start: int, stop: int) -> None:
+    """Write trace rows [start:stop] of pin activity as CSV (used for README figures)."""
+    out = Path(os.environ.get("PWM3_TRACE_DIR", "traces")) / f"{name}.csv"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    rows = ["cycle,cnt,h_a,h_b,h_c,l_a,l_b,l_c,sync,fault_i"]
+    rows += [",".join(map(str, r)) for r in sb.trace[start:stop]]
+    out.write_text("\n".join(rows) + "\n")
 
 
 def finish(sb: Scoreboard) -> None:
@@ -350,6 +361,7 @@ async def test_basic_pwm(dut):
         assert h_cnt[i] == exp_h, f"phase {i}: high-side on {h_cnt[i]} cycles, expected {exp_h}"
         assert l_cnt[i] == exp_l, f"phase {i}: low-side on {l_cnt[i]} cycles, expected {exp_l}"
         dut._log.info(f"phase {i}: C={c} P={per} DT={dt}: high {h_cnt[i]}/{n} low {l_cnt[i]}/{n}")
+    save_trace(sb, "basic_pwm", -n, None)
     finish(sb)
 
 
@@ -388,8 +400,10 @@ async def test_fault(dut):
     spi, sb = await start(dut)
     await configure(spi, 64, [16, 32, 60], 3, CTRL_EN | CTRL_OUTEN)
     await ClockCycles(dut.clk_i, 500)
+    i_fault = len(sb.trace)
     await pulse_fault(dut, 2)  # minimum guaranteed pulse width (SPEC 8)
     await ClockCycles(dut.clk_i, 10)
+    save_trace(sb, "fault_response", i_fault - 40, i_fault + 12)
     assert int(dut.pwm_h_o.value) == 0 and int(dut.pwm_l_o.value) == 0
     assert (await spi.read(A_STATUS)) & 1, "fault not latched"
     # Clear while the fault input is still active -> must stay latched.

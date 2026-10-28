@@ -1,0 +1,25 @@
+Circuit 1: pwm3_top                        |Circuit 2: pwm3_top                        
+-------------------------------------------|-------------------------------------------
+clk_i                                      |clk_i                                      
+spi_cs_ni                                  |spi_cs_ni                                  
+rst_ni                                     |rst_ni                                     
+spi_sclk_i                                 |spi_sclk_i                                 
+fault_i                                    |fault_i                                    
+spi_mosi_i                                 |spi_mosi_i                                 
+spi_miso_o                                 |spi_miso_o                                 
+sync_o                                     |sync_o                                     
+spi_miso_oe_o                              |spi_miso_oe_o                              
+pwm_l_o[2]                                 |pwm_l_o[2]                                 
+pwm_h_o[0]                                 |pwm_h_o[0]                                 
+pwm_h_o[1]                                 |pwm_h_o[1]                                 
+pwm_h_o[2]                                 |pwm_h_o[2]                                 
+pwm_l_o[0]                                 |pwm_l_o[0]                                 
+pwm_l_o[1]                                 |pwm_l_o[1]                                 
+VPWR                                       |VPWR                                       
+VGND                                       |VGND                                       
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes pwm3_top and pwm3_top are equivalent.
+
+Final result: Circuits match uniquely.
+.

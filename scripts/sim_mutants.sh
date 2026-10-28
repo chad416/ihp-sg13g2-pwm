@@ -15,7 +15,7 @@ MUTANTS=(
   "S1#pwm_timebase.v#s/cmp_ref = down ? (cnt <= c) : (cnt < c);/cmp_ref = down ? (cnt <= c) : (cnt <= c);/#compare off by one while counting up"
   "S2#pwm_timebase.v#s/load = ~hold_i & (~en_i | at_zero);/load = (~en_i | at_zero);/#shadow transfer ignores HOLD"
   "S3#pwm_timebase.v#s/if (cnt_o >= per_m1) begin/if (cnt_o >= per_e) begin/#counter turns one count late (period 2P+2)"
-  "S4#pwm_timebase.v#s/wire             at_zero = (cnt_o == {CNT_W{1'b0}});/wire             at_zero = (cnt_o == {CNT_W{1'b0}}) | dir_o;/#shadow registers also load at the peak"
+  "S4#pwm_timebase.v#s/wire             at_zero = at_zero_q;/wire             at_zero = at_zero_q | dir_o;/#shadow registers also load at the peak"
   "S5#pwm_spi_slave.v#s/waddr_o <= rx_q\[18:15\];/waddr_o <= rx_q[19:16];/#SPI write address decoded from wrong bits"
   "S6#pwm_regs.v#s/dt_o    <= {DT_W{1'b1}};  \/\/ fail-safe/dt_o    <= {DT_W{1'b0}};  \/\/ fail-safe/#dead time resets to 0 instead of maximum"
 )

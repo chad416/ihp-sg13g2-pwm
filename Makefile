@@ -14,9 +14,13 @@ RTL := rtl/pwm_sync2.v rtl/pwm_spi_slave.v rtl/pwm_regs.v rtl/pwm_timebase.v \
        rtl/pwm_deadtime.v rtl/pwm3_top.v
 RES := results
 
-.PHONY: all lint sim formal flow results versions clean
+.PHONY: all lint sim formal flow results figures versions clean
 
 all: versions lint sim formal flow results
+
+# screenshots/figures only (needs results/sim/traces from 'make sim' and results/impl from 'make results')
+figures:
+	python3 scripts/make_figures.py
 
 versions:
 	@mkdir -p $(RES)
@@ -31,7 +35,7 @@ sim:
 	@mkdir -p $(RES)/sim
 	$(MAKE) -C tb SIM=icarus 2>&1 | tee $(RES)/sim/cocotb.log
 	@cp tb/results.xml $(RES)/sim/results.xml
-	@python3 scripts/check_junit.py $(RES)/sim/results.xml | tee $(RES)/sim/summary.txt
+	@python3 scripts/check_junit.py $(RES)/sim/results.xml $(RES)/sim/cocotb.log | tee $(RES)/sim/summary.txt
 	bash scripts/sim_mutants.sh
 
 formal:
@@ -46,6 +50,7 @@ flow:
 
 results:
 	bash scripts/collect_results.sh
+	python3 scripts/make_figures.py
 
 clean:
-	rm -rf tb/sim_build tb/results.xml tb/__pycache__ formal/pwm_deadtime_* formal/pwm3_top_* flow/runs
+	rm -rf tb/sim_build tb/results.xml tb/__pycache__ formal/pwm_deadtime formal/pwm_deadtime_* formal/pwm3_top formal/pwm3_top_* flow/runs

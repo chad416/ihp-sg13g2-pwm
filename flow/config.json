@@ -1,0 +1,17 @@
+{
+  "DESIGN_NAME": "pwm3_top",
+  "VERILOG_FILES": [
+    "dir::../rtl/pwm_sync2.v",
+    "dir::../rtl/pwm_spi_slave.v",
+    "dir::../rtl/pwm_regs.v",
+    "dir::../rtl/pwm_timebase.v",
+    "dir::../rtl/pwm_deadtime.v",
+    "dir::../rtl/pwm3_top.v"
+  ],
+  "CLOCK_PORT": "clk_i",
+  "CLOCK_PERIOD": 10.0,
+  "FP_SIZING": "relative",
+  "FP_CORE_UTIL": 45,
+  "PL_TARGET_DENSITY_PCT": 55,
+  "FP_PIN_ORDER_CFG": "dir::pin_order.cfg"
+}

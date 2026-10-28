@@ -34,7 +34,12 @@ module pwm_timebase #(
 
   reg [CNT_W-1:0] per_q, cmpa_q, cmpb_q, cmpc_q;
 
-  wire             at_zero = (cnt_o == {CNT_W{1'b0}});
+  // at_zero_q == (cnt_o == 0), registered: it is set exactly in the branches
+  // below that load 0 into the counter. This keeps the 16-bit zero detect off
+  // the critical path cnt -> load -> shadow-mux fanout -> compare -> cnt
+  // (timing closure iteration 2, see README section 5).
+  reg              at_zero_q;
+  wire             at_zero = at_zero_q;
   wire             load = ~hold_i & (~en_i | at_zero);
 
   // Effective values for this cycle: when loading, the new period starts now.
@@ -56,10 +61,11 @@ module pwm_timebase #(
       cmpb_q <= {CNT_W{1'b0}};
       cmpc_q <= {CNT_W{1'b0}};
       dt_o   <= {DT_W{1'b1}};
-      cnt_o  <= {CNT_W{1'b0}};
-      dir_o  <= 1'b0;
-      ref_o  <= 3'b000;
-      sync_o <= 1'b0;
+      cnt_o     <= {CNT_W{1'b0}};
+      at_zero_q <= 1'b1;
+      dir_o     <= 1'b0;
+      ref_o     <= 3'b000;
+      sync_o    <= 1'b0;
     end else begin
       if (load) begin
         per_q  <= per_i;
@@ -69,10 +75,14 @@ module pwm_timebase #(
         dt_o   <= dt_i;
       end
 
+      // Every branch that does not load 0 loads a non-zero value: per_e >= 1,
+      // cnt+1 < per_e, or cnt-1 >= 1.
       if (!en_i || per_e == {CNT_W{1'b0}}) begin
-        cnt_o <= {CNT_W{1'b0}};
-        dir_o <= 1'b0;
+        cnt_o     <= {CNT_W{1'b0}};
+        at_zero_q <= 1'b1;
+        dir_o     <= 1'b0;
       end else if (!dir_o) begin
+        at_zero_q <= 1'b0;
         if (cnt_o >= per_m1) begin
           cnt_o <= per_e;
           dir_o <= 1'b1;
@@ -81,10 +91,12 @@ module pwm_timebase #(
         end
       end else begin
         if (cnt_o <= {{(CNT_W - 1) {1'b0}}, 1'b1}) begin
-          cnt_o <= {CNT_W{1'b0}};
-          dir_o <= 1'b0;
+          cnt_o     <= {CNT_W{1'b0}};
+          at_zero_q <= 1'b1;
+          dir_o     <= 1'b0;
         end else begin
-          cnt_o <= cnt_o - {{(CNT_W - 1) {1'b0}}, 1'b1};
+          cnt_o     <= cnt_o - {{(CNT_W - 1) {1'b0}}, 1'b1};
+          at_zero_q <= 1'b0;
         end
       end
 
@@ -97,6 +109,13 @@ module pwm_timebase #(
       sync_o <= en_i & at_zero;
     end
   end
+
+`ifdef FORMAL
+  // The registered zero flag is an exact replacement for the comparator.
+  reg f_rst_seen = 1'b0;
+  always @(posedge clk_i) if (rst_i) f_rst_seen <= 1'b1;
+  always @(*) if (f_rst_seen) assert (at_zero_q == (cnt_o == {CNT_W{1'b0}}));
+`endif
 
 endmodule
 

@@ -5,8 +5,7 @@ tb/__pycache__/
 *.vcd
 *.fst
 # formal work dirs
-formal/pwm_deadtime_*/
-formal/pwm3_top_*/
+formal/*/
 # flow runs (large); curated reports are copied to results/
 flow/runs/
 # editors / OS
