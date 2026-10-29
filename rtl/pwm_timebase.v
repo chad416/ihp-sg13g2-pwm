@@ -37,7 +37,7 @@ module pwm_timebase #(
   // at_zero_q == (cnt_o == 0), registered: it is set exactly in the branches
   // below that load 0 into the counter. This keeps the 16-bit zero detect off
   // the critical path cnt -> load -> shadow-mux fanout -> compare -> cnt
-  // (timing closure iteration 2, see README section 5).
+  // (timing closure iteration 2, see DESIGN.md section 5.1).
   reg              at_zero_q;
   wire             at_zero = at_zero_q;
   wire             load = ~hold_i & (~en_i | at_zero);

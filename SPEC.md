@@ -1,6 +1,7 @@
-# SPEC — `pwm3_top`: 3-phase centre-aligned PWM with dead-time insertion
+# SPEC: `pwm3_top`, 3-phase centre-aligned PWM with dead-time insertion
 
-Revision 1.0 · status: frozen for implementation
+Revision 1.1 · status: frozen for implementation (1.1 adds the MISO timing, CS
+high-time and fault-latency-from-pin notes; no behaviour change)
 
 This document is the contract the RTL, the reference model, the testbench and the
 formal properties are all written against. If the RTL and this spec disagree, the RTL
@@ -103,16 +104,17 @@ Per phase, with active dead time `DT` (cycles) and `DT_eff = max(DT, 1)`:
 - `SAFE = fault_sync | FAULT_LATCHED | ~CTRL.OUTEN`.
 - `FAULT_LATCHED` is set when the synchronised `fault_i` is 1. It is cleared only by
   writing `CTRL.FCLR = 1` while the synchronised fault is 0.
-- In `SAFE` all six outputs are 0 (both switches off — the safe state for a
-  two-level inverter with a freewheeling motor).
+- In `SAFE` all six outputs are 0 (both switches off, which is the safe state for
+  a two-level inverter with a freewheeling motor).
 - **Latency `N = 3` clock cycles**: if `fault_i` is 1 when sampled at clock edge *k*,
   all outputs are 0 from clock edge *k+2* onwards and stay 0 while the fault is latched
-  (2 synchroniser flops + 1 output flop; formally proven).
+  (2 synchroniser flops + 1 output flop; formally proven). Measured from the pin, that
+  is less than 3 clock periods (30 ns at 100 MHz).
 - `fault_i` must be held for at least 2 clock cycles to be guaranteed to be seen
   (shorter pulses may be filtered by the synchroniser). Over-current protection that
   must be faster than this belongs in the analog gate driver (see DESIGN.md §6).
 
-## 9. Register interface — SPI slave, mode 0
+## 9. Register interface: SPI slave, mode 0
 
 - Frame: CS low, 24 bits MSB first, CS high.
   - bit 23: `1` = write, `0` = read
@@ -120,8 +122,12 @@ Per phase, with active dead time `DT` (cycles) and `DT_eff = max(DT, 1)`:
   - bits 15:0: write data (write) / don't care (read)
 - Write: performed when the 24th bit has been received.
 - Read: read data for the address is captured after bit 16 (the 8th) and shifted out
-  MSB first on MISO during bits 15:0. MISO changes after SCLK falling edges.
-- CS high at any time aborts the frame; nothing is written.
+  MSB first on MISO during bits 15:0. MISO changes 2 to 3 `clk_i` cycles (plus
+  clock-to-output delay) after each SCLK falling edge. At the minimum SCLK low time of
+  4 cycles this leaves about one clock period (minus pad and board delay) of setup
+  time for the master.
+- CS high at any time aborts the frame; nothing is written. CS must stay high for at
+  least 4 clock cycles between frames so that the synchronised CS sees the gap.
 - Because SPI is oversampled through 2-flop synchronisers, `f_SCLK <= f_clk / 10`
   (10 MHz at 100 MHz) and SCLK high/low times must each be >= 4 clock cycles.
 
@@ -129,16 +135,16 @@ Per phase, with active dead time `DT` (cycles) and `DT_eff = max(DT, 1)`:
 
 | Addr | Name | Access | Reset | Fields |
 |------|------|--------|-------|--------|
-| 0x0 | CTRL | RW | 0x0000 | [0] EN — run counter · [1] OUTEN — enable outputs · [2] HOLD — inhibit shadow transfer · [3] FCLR — write 1 to clear latched fault (self-clearing, reads 0) |
-| 0x1 | STATUS | RO | — | [0] FAULT_LATCHED · [1] FAULT_IN (synchronised) · [2] DIR (1 = down) · [3] SAFE |
+| 0x0 | CTRL | RW | 0x0000 | [0] EN: run counter · [1] OUTEN: enable outputs · [2] HOLD: inhibit shadow transfer · [3] FCLR: write 1 to clear latched fault (self-clearing, reads 0) |
+| 0x1 | STATUS | RO | n/a | [0] FAULT_LATCHED · [1] FAULT_IN (synchronised) · [2] DIR (1 = down) · [3] SAFE |
 | 0x2 | PERIOD | RW | 0x0000 | pending period `P` |
 | 0x3 | CMPA | RW | 0x0000 | pending compare phase A |
 | 0x4 | CMPB | RW | 0x0000 | pending compare phase B |
 | 0x5 | CMPC | RW | 0x0000 | pending compare phase C |
 | 0x6 | DEADTIME | RW | 0x03FF | [DT_W-1:0] pending dead time (cycles) |
-| 0x7 | CNT | RO | — | current counter value |
+| 0x7 | CNT | RO | n/a | current counter value |
 | 0xF | ID | RO | 0x5033 | constant identifier |
-| others | — | RO | 0x0000 | reads 0, writes ignored |
+| others | n/a | RO | 0x0000 | reads 0, writes ignored |
 
 Reads of PERIOD/CMPx/DEADTIME return the *pending* (software-written) value.
 
