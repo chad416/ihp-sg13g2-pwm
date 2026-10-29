@@ -242,8 +242,8 @@
     "ERROR_ON_UNMAPPED_CELLS": true,
     "ERROR_ON_SYNTH_CHECKS": true,
     "ERROR_ON_NL_ASSIGN_STATEMENTS": true,
-    "PNR_SDC_FILE": null,
-    "SIGNOFF_SDC_FILE": null,
+    "PNR_SDC_FILE": "/tmp/pwm3_flow/flow/pwm3_top.sdc",
+    "SIGNOFF_SDC_FILE": "/tmp/pwm3_flow/flow/pwm3_top.sdc",
     "PNR_CORNERS": null,
     "SET_RC_VERBOSE": false,
     "LAYERS_RC": {

@@ -1,0 +1,71 @@
+Simulator: Verilator 5.052 2026-09-05 rev v5.052
+8/8 tests passed
+scoreboard: 509447 clock cycles compared against the model in 7 tests, 0 mismatches
+functional coverage: Bins covered: 39/39 (100.0 %)
+
+Coverage Summary:
+  line      : 100.0% (  37/  37)
+  toggle    : 100.0% (1454/1454)
+  branch    : 100.0% (  44/  44)
+  expr      : 0.0% (   0/   0)
+  fsm_state : 0.0% (   0/   0)
+  fsm_arc   : 0.0% (   0/   0)
+Note: hierarchy report contains collapsed hierarchy paths; it is not precise per-instance coverage.
+Hierarchy Coverage Summary:
+  pwm3_top
+    line      : 100.0% (  37/  37)
+    toggle    : 100.0% (1454/1454)
+    branch    : 100.0% (  44/  44)
+  pwm3_top.g_phase[*]
+    line      : 100.0% ( 6/ 6)
+    toggle    : 100.0% (78/78)
+    branch    : 100.0% ( 6/ 6)
+  pwm3_top.g_phase[*].u_dt
+    line      : 100.0% ( 6/ 6)
+    toggle    : 100.0% (78/78)
+    branch    : 100.0% ( 6/ 6)
+  pwm3_top.u_in_sync
+    line      : 100.0% ( 1/ 1)
+    toggle    : 100.0% (34/34)
+  pwm3_top.u_regs
+    line      : 100.0% ( 19/ 19)
+    toggle    : 100.0% (282/282)
+    branch    : 100.0% (  4/  4)
+  pwm3_top.u_rst_sync
+    line      : 100.0% ( 1/ 1)
+    toggle    : 100.0% (10/10)
+  pwm3_top.u_spi
+    line      : 100.0% (  2/  2)
+    toggle    : 100.0% (194/194)
+    branch    : 100.0% ( 12/ 12)
+  pwm3_top.u_tb
+    line      : 100.0% (  5/  5)
+    toggle    : 100.0% (512/512)
+    branch    : 100.0% ( 20/ 20)
+Design Unit Coverage Summary:
+  pwm3_top
+    line      : 100.0% (  3/  3)
+    toggle    : 100.0% (344/344)
+    branch    : 100.0% (  2/  2)
+  pwm_deadtime
+    line      : 100.0% ( 6/ 6)
+    toggle    : 100.0% (78/78)
+    branch    : 100.0% ( 6/ 6)
+  pwm_regs
+    line      : 100.0% ( 19/ 19)
+    toggle    : 100.0% (282/282)
+    branch    : 100.0% (  4/  4)
+  pwm_spi_slave
+    line      : 100.0% (  2/  2)
+    toggle    : 100.0% (194/194)
+    branch    : 100.0% ( 12/ 12)
+  pwm_sync2
+    line      : 100.0% ( 1/ 1)
+    toggle    : 100.0% (10/10)
+  pwm_sync2__W4
+    line      : 100.0% ( 1/ 1)
+    toggle    : 100.0% (34/34)
+  pwm_timebase
+    line      : 100.0% (  5/  5)
+    toggle    : 100.0% (512/512)
+    branch    : 100.0% ( 20/ 20)

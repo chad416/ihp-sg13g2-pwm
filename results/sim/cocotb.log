@@ -1,7 +1,7 @@
-make[1]: Entering directory '/tmp/clone/tb'
+make[1]: Entering directory '/foss/designs/pwm3/tb'
 rm -f results.xml
 mkdir -p sim_build
-/foss/tools/bin/iverilog -o sim_build/sim.vvp -s pwm3_top -g2012 -g2012 -Wall -f sim_build/cmds.f  /tmp/clone/rtl/pwm_sync2.v /tmp/clone/rtl/pwm_spi_slave.v /tmp/clone/rtl/pwm_regs.v /tmp/clone/rtl/pwm_timebase.v /tmp/clone/rtl/pwm_deadtime.v /tmp/clone/rtl/pwm3_top.v
+/foss/tools/bin/iverilog -o sim_build/sim.vvp -s pwm3_top -g2012 -g2012 -Wall -f sim_build/cmds.f  /foss/designs/pwm3/rtl/pwm_sync2.v /foss/designs/pwm3/rtl/pwm_spi_slave.v /foss/designs/pwm3/rtl/pwm_regs.v /foss/designs/pwm3/rtl/pwm_timebase.v /foss/designs/pwm3/rtl/pwm_deadtime.v /foss/designs/pwm3/rtl/pwm3_top.v
 rm -f results.xml
 COCOTB_TEST_MODULES=test_pwm3 COCOTB_TESTCASE=  COCOTB_TOPLEVEL=pwm3_top TOPLEVEL_LANG=verilog       \
 	 /foss/tools/bin/vvp -m /usr/local/lib/python3.12/dist-packages/cocotb/libs/libcocotbvpi_icarus.so   sim_build/sim.vvp -none  
@@ -9,7 +9,7 @@ COCOTB_TEST_MODULES=test_pwm3 COCOTB_TESTCASE=  COCOTB_TOPLEVEL=pwm3_top TOPLEVE
      -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:233  in gpi_load_users                  Running entry func 'initialize' from loaded library '/usr/local/lib/python3.12/dist-packages/cocotb/simulator.cpython-312-x86_64-linux-gnu.so'
      -.--ns INFO     pygpi                              ..ib/pygpi/embed.cpp:114  in initialize                      Using Python 3.12.12 interpreter at /usr/bin/python3
      -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:74   in gpi_print_registered_impl       GPI: VPI support registered
-     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1793230674
+     0.00ns INFO     cocotb.initialize                  Seeding Python random module with 1793279662
      0.00ns INFO     cocotb.initialize                  Initialized cocotb v2.1.0 from /usr/local/lib/python3.12/dist-packages/cocotb
      0.00ns INFO     cocotb.initialize                  Running on Icarus Verilog version 14.0 (devel)
      0.00ns INFO     cocotb.regression                  Running tests
@@ -37,55 +37,55 @@ COCOTB_TEST_MODULES=test_pwm3 COCOTB_TESTCASE=  COCOTB_TOPLEVEL=pwm3_top TOPLEVE
 268560.00ns INFO     cocotb.pwm3_top                    scoreboard: 3945 cycles compared, 0 errors
 268560.00ns INFO     cocotb.regression                  test_pwm3.test_fault passed
 268560.00ns INFO     cocotb.regression                  running test_pwm3.test_edge_cases (6/8)
-                                                            P=0, P=1, C=0, C>=P, DT=0 (clamped to 1), DT longer than the pulse, huge period.
-632580.01ns INFO     cocotb.pwm3_top                    scoreboard: 36395 cycles compared, 0 errors
-632580.01ns INFO     cocotb.regression                  test_pwm3.test_edge_cases passed
-632580.01ns INFO     cocotb.regression                  running test_pwm3.test_random (7/8)
+                                                            P=0, P=1, C=0, C>=P, DT=0 (clamped to 1), DT longer than the pulse, P = 0xFFFF.
+1964840.00ns INFO     cocotb.pwm3_top                    scoreboard: 169621 cycles compared, 0 errors
+1964840.00ns INFO     cocotb.regression                  test_pwm3.test_edge_cases passed
+1964840.00ns INFO     cocotb.regression                  running test_pwm3.test_random (7/8)
                                                             Constrained-random configurations, update timing, HOLD and fault injection.
-3762660.01ns INFO     cocotb.pwm3_top                    scoreboard: 313001 cycles compared, 0 errors
-3762660.01ns INFO     cocotb.regression                  test_pwm3.test_random passed
-3762660.01ns INFO     cocotb.regression                  running test_pwm3.test_zz_coverage_closure (8/8)
+5094920.01ns INFO     cocotb.pwm3_top                    scoreboard: 313001 cycles compared, 0 errors
+5094920.01ns INFO     cocotb.regression                  test_pwm3.test_random passed
+5094920.01ns INFO     cocotb.regression                  running test_pwm3.test_zz_coverage_closure (8/8)
                                                             Writes the coverage report and fails on any empty bin (runs last).
-3762660.01ns INFO     cocotb.pwm3_top                    
+5094920.01ns INFO     cocotb.pwm3_top                    
                                                         Functional coverage report (pwm3_top)
                                                         ======================================
                                                         
                                                         [period]
-                                                          HIT  0                                                    1
-                                                          HIT  1                                                    2
-                                                          HIT  2-15                                                34
-                                                          HIT  16-255                                              44
-                                                          HIT  256-4095                                            48
-                                                          HIT  >=4096                                               1
+                                                          HIT  0                                                    2
+                                                          HIT  1                                                    6
+                                                          HIT  2-15                                               103
+                                                          HIT  16-255                                             115
+                                                          HIT  256-4095                                            83
+                                                          HIT  >=4096                                               2
                                                         
                                                         [duty]
-                                                          HIT  0%                                                  88
-                                                          HIT  (0,25%]                                             32
-                                                          HIT  (25,50%]                                            48
-                                                          HIT  (50,75%]                                            41
-                                                          HIT  (75,100%)                                           37
-                                                          HIT  100%                                               144
+                                                          HIT  0%                                                 220
+                                                          HIT  (0,25%]                                            123
+                                                          HIT  (25,50%]                                           105
+                                                          HIT  (50,75%]                                            77
+                                                          HIT  (75,100%)                                           51
+                                                          HIT  100%                                               357
                                                         
                                                         [deadtime]
-                                                          HIT  0 (clamped)                                         26
-                                                          HIT  1                                                   31
-                                                          HIT  2-15                                                35
-                                                          HIT  16-255                                              36
+                                                          HIT  0 (clamped)                                         58
+                                                          HIT  1                                                   83
+                                                          HIT  2-15                                                79
+                                                          HIT  16-255                                              88
                                                           HIT  256-1022                                             1
-                                                          HIT  1023                                                 1
+                                                          HIT  1023                                                 2
                                                         
                                                         [event]
-                                                          HIT  handover low->high                                4367
-                                                          HIT  handover high->low                                5037
+                                                          HIT  handover low->high                                4372
+                                                          HIT  handover high->low                                5041
                                                           HIT  pulse swallowed by dead time                       988
-                                                          HIT  fault while high side on                            23
-                                                          HIT  fault while low side on                             19
-                                                          HIT  fault during dead time                               6
+                                                          HIT  fault while high side on                            22
+                                                          HIT  fault while low side on                             18
+                                                          HIT  fault during dead time                               7
                                                           HIT  fault clear blocked (fault still active)             1
                                                           HIT  fault cleared by software                           26
-                                                          HIT  atomic update with HOLD                             47
-                                                          HIT  compare update while running                        75
-                                                          HIT  counter disabled while running                       6
+                                                          HIT  atomic multi-register update (HOLD)                 53
+                                                          HIT  compare update while running                       206
+                                                          HIT  counter disabled mid-period                          6
                                                           HIT  spi frame aborted                                    1
                                                         
                                                         [spi_read]
@@ -100,19 +100,19 @@ COCOTB_TEST_MODULES=test_pwm3 COCOTB_TESTCASE=  COCOTB_TOPLEVEL=pwm3_top TOPLEVE
                                                           HIT  0xF                                                  2
                                                         
                                                         Bins covered: 39/39 (100.0 %)
-3762660.01ns INFO     cocotb.regression                  test_pwm3.test_zz_coverage_closure passed
-3762660.01ns INFO     cocotb.regression                  ********************************************************************************************
+5094920.01ns INFO     cocotb.regression                  test_pwm3.test_zz_coverage_closure passed
+5094920.01ns INFO     cocotb.regression                  ********************************************************************************************
                                                         ** TEST                                STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
                                                         ********************************************************************************************
-                                                        ** test_pwm3.test_reset_and_id          PASS       10125.00           0.07     136782.49  **
-                                                        ** test_pwm3.test_register_access       PASS      125185.00           0.73     171114.76  **
-                                                        ** test_pwm3.test_basic_pwm             PASS       25050.00           0.14     173173.89  **
-                                                        ** test_pwm3.test_shadow_and_hold       PASS       68680.00           0.46     149034.28  **
-                                                        ** test_pwm3.test_fault                 PASS       39520.00           0.24     162990.37  **
-                                                        ** test_pwm3.test_edge_cases            PASS      364020.00           2.23     163592.44  **
-                                                        ** test_pwm3.test_random                PASS     3130080.00          19.12     163710.32  **
-                                                        ** test_pwm3.test_zz_coverage_closure   PASS           0.00           0.00          0.00  **
+                                                        ** test_pwm3.test_reset_and_id          PASS       10125.00           0.07     147678.18  **
+                                                        ** test_pwm3.test_register_access       PASS      125185.00           0.81     155015.22  **
+                                                        ** test_pwm3.test_basic_pwm             PASS       25050.00           0.21     121258.04  **
+                                                        ** test_pwm3.test_shadow_and_hold       PASS       68680.00           0.47     145078.66  **
+                                                        ** test_pwm3.test_fault                 PASS       39520.00           0.27     144372.26  **
+                                                        ** test_pwm3.test_edge_cases            PASS     1696280.00          11.63     145891.85  **
+                                                        ** test_pwm3.test_random                PASS     3130080.00          23.25     134622.70  **
+                                                        ** test_pwm3.test_zz_coverage_closure   PASS           0.00           0.02          0.00  **
                                                         ********************************************************************************************
-                                                        ** TESTS=8 PASS=8 FAIL=0 SKIP=0                  3762660.01          23.00     163582.40  **
+                                                        ** TESTS=8 PASS=8 FAIL=0 SKIP=0                  5094920.01          36.73     138699.92  **
                                                         ********************************************************************************************
-make[1]: Leaving directory '/tmp/clone/tb'
+make[1]: Leaving directory '/foss/designs/pwm3/tb'

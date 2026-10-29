@@ -3,5 +3,5 @@ S1   compare off by one while counting up           killed (5 failing tests, fir
 S2   shadow transfer ignores HOLD                   killed (3 failing tests, first: test_shadow_and_hold)
 S3   counter turns one count late (period 2P+2)     killed (5 failing tests, first: test_basic_pwm)
 S4   shadow registers also load at the peak         killed (5 failing tests, first: test_basic_pwm)
-S5   SPI write address decoded from wrong bits      killed (4 failing tests, first: test_register_access)
+S5   SPI write address decoded from wrong bits      killed (3 failing tests, first: test_register_access)
 S6   dead time resets to 0 instead of maximum       killed (2 failing tests, first: test_reset_and_id)

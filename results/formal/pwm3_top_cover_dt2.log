@@ -1,0 +1,184 @@
+SBY 14:17:49 [pwm3_top_prove] Removing directory '/foss/designs/pwm3/formal/pwm3_top_prove'.
+SBY 14:17:49 [pwm3_top_cover] Removing directory '/foss/designs/pwm3/formal/pwm3_top_cover'.
+SBY 14:17:50 [pwm3_top_cover_dt2] Removing directory '/foss/designs/pwm3/formal/pwm3_top_cover_dt2'.
+SBY 14:17:50 [pwm3_top_cover_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm_sync2.v' to '/foss/designs/pwm3/formal/pwm3_top_cover_dt2/src/pwm_sync2.v'.
+SBY 14:17:50 [pwm3_top_cover_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm_spi_slave.v' to '/foss/designs/pwm3/formal/pwm3_top_cover_dt2/src/pwm_spi_slave.v'.
+SBY 14:17:50 [pwm3_top_cover_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm_regs.v' to '/foss/designs/pwm3/formal/pwm3_top_cover_dt2/src/pwm_regs.v'.
+SBY 14:17:50 [pwm3_top_cover_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm_timebase.v' to '/foss/designs/pwm3/formal/pwm3_top_cover_dt2/src/pwm_timebase.v'.
+SBY 14:17:50 [pwm3_top_cover_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm_deadtime.v' to '/foss/designs/pwm3/formal/pwm3_top_cover_dt2/src/pwm_deadtime.v'.
+SBY 14:17:50 [pwm3_top_cover_dt2] Copy '/foss/designs/pwm3/formal/../rtl/pwm3_top.v' to '/foss/designs/pwm3/formal/pwm3_top_cover_dt2/src/pwm3_top.v'.
+SBY 14:17:50 [pwm3_top_cover_dt2] engine_0: smtbmc yices
+SBY 14:17:51 [pwm3_top_cover_dt2] base: starting process "cd pwm3_top_cover_dt2/src; yosys -ql ../model/design.log ../model/design.ys"
+SBY 14:17:53 [pwm3_top_cover_dt2] base: finished (returncode=0)
+SBY 14:17:53 [pwm3_top_cover_dt2] prep: starting process "cd pwm3_top_cover_dt2/model; yosys -ql design_prep.log design_prep.ys"
+SBY 14:17:53 [pwm3_top_cover_dt2] prep: finished (returncode=0)
+SBY 14:17:53 [pwm3_top_cover_dt2] smt2: starting process "cd pwm3_top_cover_dt2/model; yosys -ql design_smt2.log design_smt2.ys"
+SBY 14:17:53 [pwm3_top_cover_dt2] smt2: finished (returncode=0)
+SBY 14:17:53 [pwm3_top_cover_dt2] engine_0: starting process "cd pwm3_top_cover_dt2; yosys-smtbmc -s yices --presat --unroll -c --noprogress -t 110  --append 0 --dump-vcd engine_0/trace%.vcd --dump-yw engine_0/trace%.yw --dump-vlogtb engine_0/trace%_tb.v --dump-smtc engine_0/trace%.smtc model/design_smt2.smt2"
+SBY 14:17:53 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Solver: yices
+SBY 14:17:53 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 0..
+SBY 14:17:54 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 1..
+SBY 14:17:54 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 2..
+SBY 14:17:54 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 3..
+SBY 14:17:54 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 4..
+SBY 14:17:54 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 5..
+SBY 14:17:54 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 6..
+SBY 14:17:54 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 7..
+SBY 14:17:54 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 8..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 9..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 10..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 11..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 12..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 13..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 14..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 15..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 16..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 17..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 18..
+SBY 14:17:55 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 19..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 20..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 21..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 22..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 23..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 24..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 25..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 26..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 27..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 28..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 29..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 30..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 31..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 32..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 33..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 34..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 35..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 36..
+SBY 14:17:56 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 37..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 38..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 39..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 40..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 41..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 42..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 43..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:00  Checking cover reachability in step 44..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Checking cover reachability in step 45..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Checking cover reachability in step 46..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Checking cover reachability in step 47..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Checking cover reachability in step 48..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Checking cover reachability in step 49..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Checking cover reachability in step 50..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Checking cover reachability in step 51..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Checking cover reachability in step 52..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Checking cover reachability in step 53..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Reached cover statement in step 53 at pwm3_top: pwm3_top.v:209.7-209.34 (_witness_.check_cover_pwm3_top_v_209_319)
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Writing trace to VCD file: engine_0/trace0.vcd
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:01  Writing trace to Verilog testbench: engine_0/trace0_tb.v
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Writing trace to constraints file: engine_0/trace0.smtc
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Writing trace to Yosys witness file: engine_0/trace0.yw
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Checking cover reachability in step 53..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Checking cover reachability in step 54..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Checking cover reachability in step 55..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Reached cover statement in step 55 at pwm3_top: pwm3_top.v:210.7-210.72 (_witness_.check_cover_pwm3_top_v_210_322)
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Writing trace to VCD file: engine_0/trace1.vcd
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Writing trace to Verilog testbench: engine_0/trace1_tb.v
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Writing trace to constraints file: engine_0/trace1.smtc
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Writing trace to Yosys witness file: engine_0/trace1.yw
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Checking cover reachability in step 55..
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Reached cover statement in step 55 at pwm3_top: pwm3_top.v:220.7-220.47 (_witness_.check_cover_pwm3_top_v_220_330)
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Reached cover statement in step 55 at pwm3_top.\g_phase[0].u_dt : pwm_deadtime.v:111.7-111.53 (_witness_.check_cover_pwm_deadtime_v_111_504)
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Reached cover statement in step 55 at pwm3_top.\g_phase[1].u_dt : pwm_deadtime.v:111.7-111.53 (_witness_.check_cover_pwm_deadtime_v_111_504)
+SBY 14:17:57 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Reached cover statement in step 55 at pwm3_top.\g_phase[2].u_dt : pwm_deadtime.v:111.7-111.53 (_witness_.check_cover_pwm_deadtime_v_111_504)
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:02  Writing trace to VCD file: engine_0/trace2.vcd
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:03  Writing trace to Verilog testbench: engine_0/trace2_tb.v
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:03  Writing trace to constraints file: engine_0/trace2.smtc
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:03  Writing trace to Yosys witness file: engine_0/trace2.yw
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:03  Checking cover reachability in step 55..
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:03  Checking cover reachability in step 56..
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:03  Checking cover reachability in step 57..
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:03  Checking cover reachability in step 58..
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:03  Checking cover reachability in step 59..
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:03  Checking cover reachability in step 60..
+SBY 14:17:58 [pwm3_top_cover_dt2] engine_0: ##   0:00:04  Checking cover reachability in step 61..
+SBY 14:17:59 [pwm3_top_cover_dt2] engine_0: ##   0:00:04  Checking cover reachability in step 62..
+SBY 14:17:59 [pwm3_top_cover_dt2] engine_0: ##   0:00:04  Checking cover reachability in step 63..
+SBY 14:17:59 [pwm3_top_cover_dt2] engine_0: ##   0:00:04  Checking cover reachability in step 64..
+SBY 14:17:59 [pwm3_top_cover_dt2] engine_0: ##   0:00:05  Checking cover reachability in step 65..
+SBY 14:17:59 [pwm3_top_cover_dt2] engine_0: ##   0:00:05  Checking cover reachability in step 66..
+SBY 14:17:59 [pwm3_top_cover_dt2] engine_0: ##   0:00:05  Checking cover reachability in step 67..
+SBY 14:17:59 [pwm3_top_cover_dt2] engine_0: ##   0:00:05  Checking cover reachability in step 68..
+SBY 14:18:27 [pwm3_top_cover_dt2] engine_0: ##   0:00:06  Checking cover reachability in step 69..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:06  Checking cover reachability in step 70..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:06  Checking cover reachability in step 71..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:07  Checking cover reachability in step 72..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:07  Checking cover reachability in step 73..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:08  Checking cover reachability in step 74..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:08  Checking cover reachability in step 75..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:08  Checking cover reachability in step 76..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:09  Checking cover reachability in step 77..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:10  Checking cover reachability in step 78..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:10  Checking cover reachability in step 79..
+SBY 14:18:28 [pwm3_top_cover_dt2] engine_0: ##   0:00:11  Checking cover reachability in step 80..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:11  Checking cover reachability in step 81..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:12  Checking cover reachability in step 82..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:12  Checking cover reachability in step 83..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:13  Checking cover reachability in step 84..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:14  Checking cover reachability in step 85..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:15  Checking cover reachability in step 86..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:16  Checking cover reachability in step 87..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:18  Checking cover reachability in step 88..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:19  Checking cover reachability in step 89..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:20  Checking cover reachability in step 90..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:21  Checking cover reachability in step 91..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:22  Checking cover reachability in step 92..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:24  Checking cover reachability in step 93..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:25  Checking cover reachability in step 94..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:27  Checking cover reachability in step 95..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:28  Checking cover reachability in step 96..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:29  Checking cover reachability in step 97..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:31  Checking cover reachability in step 98..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:33  Checking cover reachability in step 99..
+SBY 14:18:29 [pwm3_top_cover_dt2] engine_0: ##   0:00:35  Checking cover reachability in step 100..
+SBY 14:18:31 [pwm3_top_cover_dt2] engine_0: ##   0:00:37  Checking cover reachability in step 101..
+SBY 14:18:32 [pwm3_top_cover_dt2] engine_0: ##   0:00:38  Checking cover reachability in step 102..
+SBY 14:18:35 [pwm3_top_cover_dt2] engine_0: ##   0:00:41  Checking cover reachability in step 103..
+SBY 14:18:37 [pwm3_top_cover_dt2] engine_0: ##   0:00:43  Checking cover reachability in step 104..
+SBY 14:18:40 [pwm3_top_cover_dt2] engine_0: ##   0:00:46  Reached cover statement in step 104 at pwm3_top.\g_phase[1].u_dt : pwm_deadtime.v:110.7-110.53 (_witness_.check_cover_pwm_deadtime_v_110_499)
+SBY 14:18:40 [pwm3_top_cover_dt2] engine_0: ##   0:00:46  Writing trace to VCD file: engine_0/trace3.vcd
+SBY 14:18:41 [pwm3_top_cover_dt2] engine_0: ##   0:00:47  Writing trace to Verilog testbench: engine_0/trace3_tb.v
+SBY 14:18:41 [pwm3_top_cover_dt2] engine_0: ##   0:00:47  Writing trace to constraints file: engine_0/trace3.smtc
+SBY 14:18:41 [pwm3_top_cover_dt2] engine_0: ##   0:00:47  Writing trace to Yosys witness file: engine_0/trace3.yw
+SBY 14:18:41 [pwm3_top_cover_dt2] engine_0: ##   0:00:47  Checking cover reachability in step 104..
+SBY 14:18:43 [pwm3_top_cover_dt2] engine_0: ##   0:00:49  Reached cover statement in step 104 at pwm3_top.\g_phase[2].u_dt : pwm_deadtime.v:110.7-110.53 (_witness_.check_cover_pwm_deadtime_v_110_499)
+SBY 14:18:43 [pwm3_top_cover_dt2] engine_0: ##   0:00:49  Writing trace to VCD file: engine_0/trace4.vcd
+SBY 14:18:44 [pwm3_top_cover_dt2] engine_0: ##   0:00:50  Writing trace to Verilog testbench: engine_0/trace4_tb.v
+SBY 14:18:44 [pwm3_top_cover_dt2] engine_0: ##   0:00:50  Writing trace to constraints file: engine_0/trace4.smtc
+SBY 14:18:44 [pwm3_top_cover_dt2] engine_0: ##   0:00:50  Writing trace to Yosys witness file: engine_0/trace4.yw
+SBY 14:18:44 [pwm3_top_cover_dt2] engine_0: ##   0:00:50  Checking cover reachability in step 104..
+SBY 14:18:46 [pwm3_top_cover_dt2] engine_0: ##   0:00:52  Reached cover statement in step 104 at pwm3_top: pwm3_top.v:221.7-221.47 (_witness_.check_cover_pwm3_top_v_221_333)
+SBY 14:18:46 [pwm3_top_cover_dt2] engine_0: ##   0:00:52  Reached cover statement in step 104 at pwm3_top.\g_phase[0].u_dt : pwm_deadtime.v:110.7-110.53 (_witness_.check_cover_pwm_deadtime_v_110_499)
+SBY 14:18:46 [pwm3_top_cover_dt2] engine_0: ##   0:00:52  Writing trace to VCD file: engine_0/trace5.vcd
+SBY 14:18:47 [pwm3_top_cover_dt2] engine_0: ##   0:00:53  Writing trace to Verilog testbench: engine_0/trace5_tb.v
+SBY 14:18:47 [pwm3_top_cover_dt2] engine_0: ##   0:00:53  Writing trace to constraints file: engine_0/trace5.smtc
+SBY 14:18:47 [pwm3_top_cover_dt2] engine_0: ##   0:00:53  Writing trace to Yosys witness file: engine_0/trace5.yw
+SBY 14:18:47 [pwm3_top_cover_dt2] engine_0: ##   0:00:53  Status: passed
+SBY 14:18:47 [pwm3_top_cover_dt2] engine_0: finished (returncode=0)
+SBY 14:18:47 [pwm3_top_cover_dt2] engine_0: Status returned by engine: pass
+SBY 14:18:47 [pwm3_top_cover_dt2] summary: Elapsed clock time [H:MM:SS (secs)]: 0:00:57 (57)
+SBY 14:18:47 [pwm3_top_cover_dt2] summary: Elapsed process time [H:MM:SS (secs)]: 0:01:07 (67)
+SBY 14:18:47 [pwm3_top_cover_dt2] summary: engine_0 (smtbmc yices) returned pass
+SBY 14:18:47 [pwm3_top_cover_dt2] summary: cover trace: pwm3_top_cover_dt2/engine_0/trace0.vcd
+SBY 14:18:47 [pwm3_top_cover_dt2] summary:   reached cover statement pwm3_top._witness_.check_cover_pwm3_top_v_209_319 at pwm3_top.v:209.7-209.34 step 53
+SBY 14:18:47 [pwm3_top_cover_dt2] summary: cover trace: pwm3_top_cover_dt2/engine_0/trace1.vcd
+SBY 14:18:47 [pwm3_top_cover_dt2] summary:   reached cover statement pwm3_top._witness_.check_cover_pwm3_top_v_210_322 at pwm3_top.v:210.7-210.72 step 55
+SBY 14:18:47 [pwm3_top_cover_dt2] summary: cover trace: pwm3_top_cover_dt2/engine_0/trace2.vcd
+SBY 14:18:47 [pwm3_top_cover_dt2] summary:   reached cover statement pwm3_top.\g_phase[0].u_dt ._witness_.check_cover_pwm_deadtime_v_111_504 at pwm_deadtime.v:111.7-111.53 step 55
+SBY 14:18:47 [pwm3_top_cover_dt2] summary:   reached cover statement pwm3_top.\g_phase[1].u_dt ._witness_.check_cover_pwm_deadtime_v_111_504 at pwm_deadtime.v:111.7-111.53 step 55
+SBY 14:18:47 [pwm3_top_cover_dt2] summary:   reached cover statement pwm3_top.\g_phase[2].u_dt ._witness_.check_cover_pwm_deadtime_v_111_504 at pwm_deadtime.v:111.7-111.53 step 55
+SBY 14:18:47 [pwm3_top_cover_dt2] summary:   reached cover statement pwm3_top._witness_.check_cover_pwm3_top_v_220_330 at pwm3_top.v:220.7-220.47 step 55
+SBY 14:18:47 [pwm3_top_cover_dt2] summary: cover trace: pwm3_top_cover_dt2/engine_0/trace3.vcd
+SBY 14:18:47 [pwm3_top_cover_dt2] summary:   reached cover statement pwm3_top.\g_phase[1].u_dt ._witness_.check_cover_pwm_deadtime_v_110_499 at pwm_deadtime.v:110.7-110.53 step 104
+SBY 14:18:47 [pwm3_top_cover_dt2] summary: cover trace: pwm3_top_cover_dt2/engine_0/trace4.vcd
+SBY 14:18:47 [pwm3_top_cover_dt2] summary:   reached cover statement pwm3_top.\g_phase[2].u_dt ._witness_.check_cover_pwm_deadtime_v_110_499 at pwm_deadtime.v:110.7-110.53 step 104
+SBY 14:18:47 [pwm3_top_cover_dt2] summary: and 1 further trace
+SBY 14:18:47 [pwm3_top_cover_dt2] summary: see pwm3_top_cover_dt2/PASS for a complete summary
+SBY 14:18:47 [pwm3_top_cover_dt2] DONE (PASS, rc=0)

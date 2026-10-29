@@ -1,12 +1,12 @@
 PASS  test_reset_and_id            wall=0.1 s
-PASS  test_register_access         wall=0.7 s
-PASS  test_basic_pwm               wall=0.1 s
+PASS  test_register_access         wall=0.8 s
+PASS  test_basic_pwm               wall=0.2 s
 PASS  test_shadow_and_hold         wall=0.5 s
-PASS  test_fault                   wall=0.2 s
-PASS  test_edge_cases              wall=2.2 s
-PASS  test_random                  wall=19.1 s
+PASS  test_fault                   wall=0.3 s
+PASS  test_edge_cases              wall=11.6 s
+PASS  test_random                  wall=23.3 s
 PASS  test_zz_coverage_closure     wall=0.0 s
 
 8/8 tests passed
-scoreboard: 376221 clock cycles compared against the model in 7 tests, 0 mismatches
+scoreboard: 509447 clock cycles compared against the model in 7 tests, 0 mismatches
 functional coverage: Bins covered: 39/39 (100.0 %)
