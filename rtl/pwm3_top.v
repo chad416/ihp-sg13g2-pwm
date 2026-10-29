@@ -210,6 +210,18 @@ module pwm3_top #(
       cover ($past(fault_latched_q) && !fault_latched_q && !$past(rst));  // fault cleared by SW
     end
   end
+
+`ifdef FORMAL_COVER_OUTPUTS
+  // The outputs really switch after SPI programming. Only reachable within a
+  // short bound when the reset dead time is small, so these are enabled only in
+  // the cover_dt2 task (DT_W = 2, reset dead time 3 cycles).
+  always @(posedge clk_i) begin
+    if (f_ok) begin
+      cover (pwm_l_o[0] && !$past(pwm_l_o[0]));  // low side A turns on
+      cover (pwm_h_o[0] && !$past(pwm_h_o[0]));  // high side A turns on
+    end
+  end
+`endif
 `endif
 
 endmodule

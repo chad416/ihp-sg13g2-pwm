@@ -4,15 +4,19 @@
 #          (asserted inside pwm_deadtime), fault latency N = 3, a tripped fault
 #          and OUTEN=0 keep all outputs off. Default parameters (DT_W = 10).
 # cover:   a real SPI write frame and a software fault clear are reachable.
-# bmc_dt2: deep bounded check (75 cycles) with DT_W = 2, so that the reset dead
+# bmc_dt2: deep bounded check (110 cycles) with DT_W = 2, so that the reset dead
 #          time is 3 cycles instead of 1023 and the outputs actually switch
-#          within the bound, including after an SPI write of OUTEN. Used by the
+#          within the bound (see cover_dt2), including after SPI writes. Used by the
 #          mutation check (scripts/formal_mutants.sh) to show the top-level
 #          properties catch real bugs.
+# cover_dt2: with DT_W = 2, a low side and a high side really turn on at the
+#          pins after SPI programming (covers enabled by FORMAL_COVER_OUTPUTS).
+#          This shows the bmc_dt2 bound is deep enough for the outputs to switch.
 
 [tasks]
 prove
 cover
+cover_dt2
 bmc_dt2
 
 [options]
@@ -20,18 +24,22 @@ prove: mode prove
 prove: depth 8
 cover: mode cover
 cover: depth 90
+cover_dt2: mode cover
+cover_dt2: depth 110
 bmc_dt2: mode bmc
-bmc_dt2: depth 75
+bmc_dt2: depth 110
 
 [engines]
 smtbmc yices
 
 [script]
+cover_dt2: verilog_defines -DFORMAL_COVER_OUTPUTS
 read_verilog -formal pwm_sync2.v pwm_spi_slave.v pwm_regs.v pwm_timebase.v pwm_deadtime.v pwm3_top.v
 bmc_dt2: chparam -set DT_W 2 pwm3_top
+cover_dt2: chparam -set DT_W 2 pwm3_top
 prep -top pwm3_top
-# The dead-time unit's own covers need several SPI writes to reach at top level;
-# they are already reached in pwm_deadtime.sby.
+# With DT_W = 10 the dead-time unit's own covers need more than 1023 cycles at
+# top level; they are reached in pwm_deadtime.sby and, with DT_W = 2, in cover_dt2.
 cover: chformal -cover -remove *pwm_deadtime*
 
 [files]
