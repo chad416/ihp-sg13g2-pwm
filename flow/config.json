@@ -13,5 +13,7 @@
   "FP_SIZING": "relative",
   "FP_CORE_UTIL": 45,
   "PL_TARGET_DENSITY_PCT": 55,
-  "FP_PIN_ORDER_CFG": "dir::pin_order.cfg"
+  "IO_PIN_ORDER_CFG": "dir::pin_order.cfg",
+  "PNR_SDC_FILE": "dir::pwm3_top.sdc",
+  "SIGNOFF_SDC_FILE": "dir::pwm3_top.sdc"
 }
