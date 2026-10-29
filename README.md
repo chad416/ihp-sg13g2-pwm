@@ -1,280 +1,211 @@
-# pwm3_top — 3-phase PWM with dead-time insertion, RTL to GDS on IHP SG13G2
+# pwm3_top: 3-phase PWM with dead-time insertion, RTL to GDS on IHP SG13G2
 
-A three-phase, centre-aligned motor-control PWM generator with programmable dead time,
-a latched fault shutdown and an SPI register interface. It goes from a written spec
-through formal proofs and a model-based cocotb testbench to a DRC- and LVS-clean
-layout on the open-source **IHP SG13G2 130 nm BiCMOS PDK**.
+A three-phase, centre-aligned motor-control PWM block (programmable dead time, latched
+fault shutdown, SPI registers) taken from a written spec through formal proofs and a
+model-based cocotb testbench to a DRC- and LVS-clean macro layout on the open IHP SG13G2
+130 nm PDK, so that the shoot-through safety of the gate-drive outputs is proven rather
+than only simulated.
 
-![layout](results/layout_pwm3_top.png)
+Status: layout only. It has not been fabricated and nothing here was measured on
+silicon. Every number below is read from tool output committed under `results/`.
 
-*Final layout (KLayout render of `results/impl/final/pwm3_top.gds`, IHP layer colours).*
+## Signoff summary
 
-> Status: personal portfolio project. Not taped out. All numbers below are copied from
-> tool output that is committed in `results/`. The tool versions are in
-> `results/tool_versions.txt`.
+Final run, LibreLane 3.1.0.dev3, `sg13g2_stdcell`, 100 MHz target
+([results/impl/summary.md](results/impl/summary.md), generated from the flow's `metrics.json`).
 
----
-
-## 1. Motivation — why dead time matters
-
-A three-phase inverter has two power switches per phase leg (high side and low side).
-If both conduct at the same time, the DC link is shorted through the leg
-(**shoot-through**). The current is limited only by stray inductance, and the switches
-can be destroyed within microseconds. Real MOSFETs and IGBTs turn *off* more slowly than
-they turn *on*, because of gate charge, Miller plateau and IGBT tail current. So a
-controller must leave a gap, the **dead time**, between one switch's off command and the
-other switch's on command.
-
-Dead time is a trade-off:
-- Too short, and you risk shoot-through.
-- Too long, and you get output-voltage distortion and current-zero-crossing errors
-  (torque ripple in a servo), plus extra body-diode conduction losses.
-
-This is why a PWM block for a gate driver must guarantee the minimum dead time *by
-construction*, under all register writes and all fault timings, not just in the
-normal case. That guarantee is what this project verifies formally.
-
-The block is the digital front end of what an inverter gate-driver chain needs. It
-connects my servo-drive work (EtherCAT servo joints) with the power side: gate drivers
-and power stages.
-
-## 2. Architecture
-
-Full contract: [SPEC.md](SPEC.md). Micro-architecture and trade-offs: [DESIGN.md](DESIGN.md).
-
-```
- SPI (mode 0) ──► 2-FF sync ──► SPI slave ──► register file ──► time base ──► 3x dead-time unit ──► pwm_h_o[2:0]
-                                (oversampled)   (pending regs)    shadow regs      (registered)      ──► pwm_l_o[2:0]
- fault_i ──────► 2-FF sync ──► fault latch ───────────── safe ───────────────────────┘               ──► sync_o
- rst_ni ───────► 2-FF sync ──► synchronous reset
-```
-
-- **Time base:** 16-bit up/down counter. One period is `2·PERIOD` clock cycles, so
-  `f_PWM = f_clk / (2·PERIOD)`. Duty cycle is `CMPx / PERIOD`, and each pulse is
-  centred on the counter valley.
-- **Shadow registers:** PERIOD, CMPA/B/C and DEADTIME are loaded only at the valley, so
-  a write can never create an extra edge mid-period. A HOLD bit lets software update
-  all three phases atomically.
-- **Dead-time unit (per phase):** turn-off is immediate. Turn-on is allowed only after
-  both switches have been off for `max(DT,1)` cycles. Pulses shorter than the dead time
-  are swallowed.
-- **Fault:** `fault_i` → all six outputs off within **3 clock cycles** (30 ns at
-  100 MHz). The fault is latched, and it is cleared only by software and only once the
-  fault input has gone away.
-- **Interfaces:** single clock, synchronous reset, 2-flop synchronisers on every
-  asynchronous input, and all outputs straight from flip-flops (no glitches).
-  The SPI is oversampled, so there is no second clock domain.
-
-## 3. Verification strategy
-
-| Layer | Purpose | Tool |
-|---|---|---|
-| Formal proof, dead-time module | No overlap, dead time ≥ `max(DT,1)`, safe → off, with **all inputs unconstrained**; unbounded proof | SymbiYosys + Yices (k-induction) |
-| Formal proof, full design | The same in context, plus fault latency ≤ 3 cycles, tripped fault / OUTEN=0 keep outputs off, for **any SPI traffic**; unbounded proof | SymbiYosys + Yices (k-induction) |
-| Formal cover + deep BMC | The properties are reachable and not vacuous: hand-over both ways, real SPI frame, fault clear; 75-cycle BMC where outputs switch | SymbiYosys |
-| Formal mutation check | 7 injected bugs (shoot-through, short dead time, ignored fault, slower fault path, …) must each make a proof fail | `scripts/formal_mutants.sh` |
-| Simulation | Function vs. a cycle-accurate Python model written from the spec; every output compared every cycle; directed + constrained-random tests; functional coverage with a closure gate | cocotb 2.1 + Icarus |
-| Simulation mutation check | 6 functional bugs outside the formal scope (compare off-by-one, HOLD ignored, …) must each fail the regression | `scripts/sim_mutants.sh` |
-| Lint | `verilator --lint-only -Wall`, no waivers | Verilator |
-
-The division of labour is deliberate:
-- **Formal** gives *guarantees* for the safety properties. A simulation can only sample
-  them, and the dangerous cases (a fault arriving in the one cycle of a hand-over,
-  register writes at the valley) are exactly the ones random tests rarely hit.
-- **Simulation** checks the *function* (period, duty, shadow timing, register map),
-  which is long-winded to express as properties.
-- **Mutation testing** checks the checkers. A green proof or regression is worth little
-  unless it is shown to go red on a broken design.
-
-### Verification results
-
-| Check | Result | Evidence |
-|---|---|---|
-| Lint, Verilator 5.052 `-Wall` | 0 warnings | [results/lint/verilator_lint.log](results/lint/verilator_lint.log) |
-| Formal: dead-time unit, unbounded proof | **PASS** (k-induction) | [results/formal/pwm_deadtime_prove.log](results/formal/pwm_deadtime_prove.log) |
-| Formal: full design, unbounded proof | **PASS** (k-induction) | [results/formal/pwm3_top_prove.log](results/formal/pwm3_top_prove.log) |
-| Formal: covers (module and top) | all reached | `results/formal/*_cover.log` |
-| Formal: 75-cycle BMC, DT_W = 2 | PASS | [results/formal/pwm3_top_bmc_dt2.log](results/formal/pwm3_top_bmc_dt2.log) |
-| Formal mutation check | **7/7 mutants killed** | [results/formal/mutation.txt](results/formal/mutation.txt) |
-| cocotb regression | **8/8 tests pass**; 376,221 cycles compared with the model on every output, 0 mismatches | [results/sim/summary.txt](results/sim/summary.txt) |
-| Functional coverage | **39/39 bins (100 %)** | [results/sim/coverage_report.txt](results/sim/coverage_report.txt) |
-| Simulation mutation check | **6/6 mutants killed** | [results/sim/mutation.txt](results/sim/mutation.txt) |
-
-The proven properties (`rtl/pwm_deadtime.v`, `rtl/pwm3_top.v`, under `ifdef FORMAL`):
-
-1. `pwm_h_o[i] & pwm_l_o[i]` is never 1 (all phases).
-2. Every turn-on of either switch is preceded by ≥ `max(DT,1)` consecutive both-off
-   cycles, with DT the value in force at that moment. The checker counts the off cycles
-   from the output pins only.
-3. `fault_i` high when sampled → all six outputs are 0 three clock edges later,
-   whatever the other inputs do.
-4. Once a fault is seen, all outputs stay off until a CTRL write with FCLR while the
-   fault input is gone (an independent observer, not the design's latch).
-5. `OUTEN = 0` → all outputs off.
-
-The random test uses a fixed seed (`PWM3_SEED`, default 20261028) so that runs are
-reproducible; other seeds can be run with `make -C tb PWM3_SEED=<n>`.
-
-## 4. Implementation flow
-
-LibreLane (Classic flow: Yosys → OpenROAD floorplan/PDN/placement/CTS/routing → RC
-extraction → multi-corner OpenSTA → Magic + KLayout stream-out → Magic and KLayout DRC →
-Netgen LVS) on IHP SG13G2 with the `sg13g2_stdcell` library. The block is hardened as a
-macro (core + pins, no pad ring). Configuration: [flow/config.json](flow/config.json).
-
-**Clock target: 100 MHz.** Motor-control PWM timers run at 100–200 MHz (TI C2000 ePWM,
-NXP eFlexPWM). At 100 MHz, a 20 kHz PWM gives `PERIOD = 2500` (11.3-bit duty resolution)
-and 10 ns dead-time steps, which is enough for Si IGBT and SiC dead times (0.3–3 µs).
-Anything faster would not improve an inverter. Sub-10 ns dead time for GaN needs a
-delay-line HRPWM, not a faster clock. Full justification: DESIGN.md §2.
-
-## 5. Implementation results
-
-Final run (iteration 2), IHP SG13G2 `sg13g2_stdcell`, LibreLane 3.1.0.dev3. Every value
-is copied from [results/impl/summary.md](results/impl/summary.md), which
-`scripts/summarize_impl.py` generates from LibreLane's `metrics.json`.
-
-| Metric | Value |
+| Check | Result |
 |---|---|
-| Clock constraint | 10 ns (100 MHz), 0.25 ns uncertainty, 5 % derate |
-| Die / core area | 72,321.8 µm² (259.7 × 278.5 µm) / 60,972.9 µm² |
-| Standard-cell area (excl. fill) | 36,607.3 µm², core utilisation 60.0 % |
-| Cells | 2,462 standard cells (288 flip-flops, 413 hold buffers), 5,552 instances incl. fill/tap |
-| Setup worst slack | **+1.158 ns** (slow 1.08 V/125 °C), +4.328 ns (typ), +6.172 ns (fast) |
-| Hold worst slack | **+0.107 ns** (fast 1.32 V/−40 °C) |
-| Setup / hold violations | 0 / 0, at all three corners |
-| Max slew / max cap violations | 0 / 0 |
-| Max fanout warnings | 24, all clock-tree leaf buffers (fanout 14–15 vs. library limit 8; slew and cap on these nets are clean) |
-| Clock skew (worst) | 0.281 ns |
-| f_max estimate | ≈113 MHz slow, ≈176 MHz typ, ≈261 MHz fast (= 1/(T − WS), estimated, not a separate run) |
-| Power (typ corner, vectorless) | 2.124 mW total: 1.796 mW internal, 0.326 mW switching, 1.8 µW leakage |
-| Detailed-route DRC | 0 |
-| **KLayout DRC** (IHP `ihp-sg13g2.drc`) | **0 errors** |
-| **Magic DRC** | **0 errors** |
-| **Netgen LVS** | **0 errors: "Circuits match uniquely"** |
-| Antenna violations | 0 |
-| GDS | [results/impl/final/pwm3_top.gds](results/impl/final/pwm3_top.gds) (2.2 MB, committed) |
+| Setup worst slack, slow 1.08 V / 125 °C | **+1.158 ns** (typ 1.20 V / 25 °C: +4.328 ns, fast 1.32 V / -40 °C: +6.172 ns) |
+| Hold worst slack, fast 1.32 V / -40 °C | **+0.107 ns** (slow: +0.604 ns, typ: +0.285 ns) |
+| Setup and hold WNS / TNS, all three corners | 0 / 0 ns (no failing path) |
+| Area | die 259.7 x 278.5 µm (0.072 mm²), 36,607 µm² standard cells, 60.0 % core utilisation |
+| Cells | 2,462 standard cells, 288 flip-flops (plus fill and tap cells) |
+| Power, typ corner | 2.12 mW, vectorless estimate (not from simulation activity) |
+| DRC | KLayout with the IHP `ihp-sg13g2.drc` deck: 0; Magic: 0; antenna: 0 |
+| LVS | Netgen: circuits match uniquely |
+| Formal | unbounded proofs of no-overlap, dead time and fault latency; all covers reached |
+| Simulation | 8/8 tests, 509,447 cycles compared with a reference model, 0 mismatches |
+| Coverage | functional 39/39 bins; code: line, branch and toggle 100 % (Verilator) |
 
-Power is dominated by sequential (70 %) and clock-tree (27 %) internal power, as
-expected for a register-heavy block at 100 MHz with the default vectorless activity. The
-real switching activity of a PWM is low (each output toggles twice per period), so this
-estimate is pessimistic for the combinational part and not a measured figure.
+<img src="results/layout_pwm3_top.png" alt="Final layout of pwm3_top" width="480">
 
-**Timing-closure iteration** (details in DESIGN.md §5.1):
+*KLayout render of [results/impl/final/pwm3_top.gds](results/impl/final/pwm3_top.gds) with
+the IHP layer colours.*
 
-| | Iter. 1 (baseline) | Iter. 2 (final) |
+**Reproduce everything** (lint, simulation, coverage, formal, RTL to GDS, signoff
+reports and figures) with Docker and the pinned image `hpretl/iic-osic-tools:2026.10`:
+
+```bash
+scripts/run_all.sh                                          # Linux / macOS
+powershell -ExecutionPolicy Bypass -File scripts\run_all.ps1  # Windows, Docker Desktop
+```
+
+Details and run time are in [Reproduce](#reproduce).
+
+## Architecture
+
+```
+ SPI (mode 0) --> 2-FF sync --> SPI slave --> register file --> time base --> 3x dead-time --> pwm_h_o[2:0]
+                                (oversampled)  (pending regs)   (shadow regs)    (registered)  --> pwm_l_o[2:0]
+ fault_i -------> 2-FF sync --> fault latch -------------- safe ----------------------^         --> sync_o
+ rst_ni --------> 2-FF sync --> synchronous reset
+```
+
+- **Time base:** 16-bit up/down counter, `f_PWM = f_clk / (2 * PERIOD)`, duty =
+  `CMPx / PERIOD`, pulses centred on the counter valley.
+- **Shadow registers:** PERIOD, CMPA/B/C and DEADTIME load only at the valley, so a write
+  cannot add an edge mid-period. A HOLD bit makes multi-register updates atomic.
+- **Dead-time unit (per phase):** turn-off is immediate; turn-on needs both switches off
+  for `max(DT, 1)` cycles. Shorter reference pulses are swallowed.
+- **Fault:** `fault_i` sampled high at clock edge k forces all six outputs low at edge k+2
+  (under 30 ns from the pin at 100 MHz). The fault is latched and only software can clear
+  it, and only after the input has gone away.
+- **Interfaces:** one clock, every asynchronous input through a 2-flop synchroniser, every
+  output straight from a flip-flop. The SPI is oversampled, so there is no second clock
+  domain and no CDC beyond the synchronisers.
+
+Register map, timing contract and reset values: [SPEC.md](SPEC.md). Micro-architecture,
+trade-offs and the timing-closure story: [DESIGN.md](DESIGN.md).
+
+## Verification
+
+| Layer | What it checks | Result |
 |---|---|---|
-| Setup WS, slow corner | +0.143 ns | **+1.158 ns** |
-| Setup WS, typical | +3.671 ns | +4.328 ns |
-| Std-cell area | 36,260.8 µm² | 36,607.3 µm² |
-| Flip-flops | 287 | 288 |
+| Lint | `verilator --lint-only -Wall`, no waivers | 0 warnings |
+| Formal proof, dead-time unit | no overlap, dead time >= `max(DT,1)`, safe -> off; all inputs free; k-induction | PASS |
+| Formal proof, full design | the same in context, fault latency, latched fault and OUTEN=0 keep outputs off; free SPI, fault and reset pins; k-induction | PASS |
+| Formal covers | hand-over both ways, SPI write, fault clear; with `DT_W = 2` a low and a high side turn on at the pins (steps 55 and 104) | all reached |
+| Deep BMC, `DT_W = 2` | 110 cycles, long enough for the outputs to switch | PASS |
+| Formal mutation | 7 injected bugs (overlap, short dead time, ignored fault, slower fault path, ...) | 7/7 caught |
+| cocotb regression | cycle-accurate Python model written from the spec, all 7 outputs compared every cycle; directed tests (duty 0 % and 100 %, `P = 0, 1, 0xFFFF`, `DT = 0`, pulse shorter than DT, period and compare change while running, HOLD, faults, aborted SPI frames) plus 120 constrained-random configurations | 8/8 pass on Icarus and on Verilator |
+| Simulation mutation | 6 functional bugs outside the formal scope (compare off by one, HOLD ignored, ...) | 6/6 caught |
 
-Iteration 1 met timing, but with only 0.14 ns of margin at the slow corner. Its critical
-path ran from the counter through a 16-bit zero detect into the shadow-load enable,
-which drives about 80 mux selects. Replacing the comparator with a registered flag
-(proven equivalent) removed the zero detect from that path and gave about 1 ns of
-margin, at a cost of +1 flop and +1 % area. Iteration 1 evidence:
-[results/impl_iter1_baseline/](results/impl_iter1_baseline/).
+What "100 % coverage" means here, precisely:
 
-### Screenshots (all generated from tool output by `make results`)
+- **Functional:** 39 bins in a small custom collector (period, duty and dead-time ranges,
+  hand-overs, swallowed pulses, fault while high/low/in dead time, blocked and successful
+  fault clear, HOLD updates, aborted SPI frames, reads of every register). Bins are
+  sampled by the scoreboard from what the design did, not from what a test intended,
+  and the regression fails on any empty bin.
+- **Code:** the same regression on Verilator 5.052: line (block) 37/37, branch 44/44,
+  toggle 1454/1454 bits. Expression and FSM coverage are not measured. Code under
+  `ifdef FORMAL` is not part of it.
+
+The random tests use a fixed seed (`PWM3_SEED`, default 20261028); other seeds:
+`make -C tb PWM3_SEED=<n>`. Evidence: [results/formal/](results/formal/),
+[results/sim/](results/sim/), [results/lint/](results/lint/).
 
 | | |
 |---|---|
 | ![3-phase PWM](docs/screenshots/sim_pwm_3phase.png) | ![dead time](docs/screenshots/sim_deadtime_zoom.png) |
-| 3-phase PWM from the cocotb run (pins recorded by the scoreboard) | Measured dead time on the pins: 7 cycles = 70 ns for DEADTIME = 7 |
+| Three phases from the cocotb run (pins recorded by the scoreboard) | Dead time on the pins: 7 cycles = 70 ns for DEADTIME = 7 |
+
+## Physical design results
+
+| Corner | Setup WS | Setup TNS | Hold WS | Hold TNS | f_max estimate |
+|---|---|---|---|---|---|
+| `nom_slow_1p08V_125C` | +1.158 ns | 0 | +0.604 ns | 0 | 113 MHz |
+| `nom_typ_1p20V_25C` | +4.328 ns | 0 | +0.285 ns | 0 | 176 MHz |
+| `nom_fast_1p32V_m40C` | +6.172 ns | 0 | +0.107 ns | 0 | 261 MHz |
+
+f_max = 1 / (10 ns - setup WS), estimated from the 100 MHz run. `nom` is the only RC
+extraction corner the PDK provides. Constraints: [flow/pwm3_top.sdc](flow/pwm3_top.sdc)
+(0.25 ns clock uncertainty for setup and hold, +/-5 % derate, 20 % I/O delay).
+
+- **Timing closure.** The first run met timing with only +0.143 ns at the slow corner. Its
+  critical path went from the counter through a 16-bit zero detect into the shadow-load
+  enable, which drives about 80 mux selects. Replacing the comparator with a registered
+  zero flag (equivalence proven by k-induction) gave +1.158 ns for one extra flop and
+  +1 % area. Details and both critical paths: DESIGN.md section 5.1.
+- **Hold buffers.** 413 hold buffers were inserted, because the 0.25 ns uncertainty also
+  applies to hold. One sits on today's worst setup path and costs 0.66 ns there.
+- **Max-fanout warnings.** 24, all on clock-tree leaf buffers (fanout 10 to 15 against a
+  limit of 8); slew and capacitance on these nets are within limits.
+- **Flops.** The library has no flop without a reset pin, so all 288 flops are
+  `sg13g2_dfrbpq_1` with `RESET_B` tied high (DESIGN.md section 3.9).
+- **Power.** 2.12 mW at the typical corner: 70 % sequential, 27 % clock tree, with
+  OpenSTA's default activity. A PWM's real activity is lower, so treat it as an upper
+  estimate.
+
+Signoff reports per corner: [results/impl/sta/](results/impl/sta/). DRC:
+[results/impl/drc_klayout/](results/impl/drc_klayout/), LVS:
+[results/impl/lvs_netgen/](results/impl/lvs_netgen/).
+
+| | |
+|---|---|
 | ![fault](docs/screenshots/sim_fault_response.png) | ![layout detail](docs/screenshots/layout_detail_40x40um.png) |
-| Fault shutdown on the pins, 3 clock edges | 40 × 40 µm layout detail (KLayout, IHP layer colours) |
-| ![STA](docs/screenshots/term_sta_signoff.png) | ![formal](docs/screenshots/term_formal.png) |
-| Post-route multi-corner STA + signoff summary | Formal results and mutation check |
-| ![sim](docs/screenshots/term_sim.png) | ![LVS](docs/screenshots/term_lvs.png) |
-| cocotb regression and simulation mutation check | Netgen LVS: circuits match uniquely |
+| Fault shutdown on the pins | 40 x 40 µm layout detail |
 
-Also in `docs/screenshots/`: `term_coverage.png` (all 39 coverage bins) and
-`layout_librelane_render.png` (LibreLane's own render).
+Rendered report images (`term_*.png`) and LibreLane's own layout render are in
+[docs/screenshots/](docs/screenshots/); they are generated from the committed result
+files by `make results`.
 
-## 6. Engineering decisions and trade-offs
+## Limitations
 
-Summary; the details are in DESIGN.md §3.
-
-- **Shoot-through impossible by construction.** Turn-on needs *both* outputs off for
-  `DT_eff` cycles. There is no "delay each edge" logic that could let two delayed edges
-  overlap. Cost: pulses narrower than the dead time are swallowed, which a power stage
-  would not reproduce anyway.
-- **`DT = 0` is clamped to 1 cycle.** Software cannot program a same-edge hand-over.
-- **Fail-safe reset.** Dead time resets to its maximum (10.23 µs) and the outputs are
-  disabled.
-- **Synchronous fault path, 3 cycles.** This is metastability-safe and fully covered by
-  the synchronous formal model. The 30 ns latency is two orders of magnitude below the
-  analog gate driver's desaturation protection (µs), which remains the fastest line of
-  defence.
-- **Oversampled SPI.** It keeps the design single-clock, so the formal proofs cover the
-  register interface with free inputs. Cost: `f_SCLK ≤ f_clk/10`.
-- **Timing closure by micro-architecture, not by tool effort.** See §5: the critical
-  path was moved by replacing a comparator with an equivalent registered flag. The
-  equivalence is formally proven.
-
-## 7. Limitations
-
-- **Not taped out.** The results are from an open PDK and open tools (signoff-quality
-  for this PDK, but not a foundry signoff). There is no silicon measurement.
-- **Macro only.** There is no pad ring, ESD or I/O timing to real pads. The I/O delay
-  constraints are LibreLane defaults (a percentage of the clock period), not
-  board-derived.
-- **DRC scope.** KLayout ran the full IHP `ihp-sg13g2.drc` deck (FEOL, BEOL, pin and
-  forbidden-layer rules) with recommended rules disabled (`no_recommended=1`, the
-  LibreLane default). Chip-level metal-density rules are not meaningful for a macro and
-  were not checked; they would apply at full-chip integration with fill.
-- **Power is a vectorless estimate** from OpenSTA with default switching activity, not
-  from simulation activity (VCD/SAIF).
+- **Not fabricated.** Open PDK, open tools. The checks are what this flow offers for
+  SG13G2, not a foundry signoff, and there is no silicon data.
+- **Macro only.** No pad ring, ESD or board-level I/O timing; the I/O delays are a 20 %
+  budget, not derived from a real interface.
+- **DRC scope.** Full IHP KLayout deck (FEOL, BEOL, pin and forbidden-layer rules) with
+  recommended rules off (LibreLane default). Metal-density rules are left for chip-level
+  integration with fill.
+- **Parasitics.** Nominal RC only; no RC-best/RC-worst corners.
+- **Power** is vectorless, not from simulation activity (VCD/SAIF).
 - **Synchronous reset (as specified).** The outputs are undefined until two clock edges
-  after power-up. A real board relies on the gate driver's enable/UVLO or pull-downs.
-  DESIGN.md §3.9 discusses an asynchronous-assert variant for the six output flops.
-- **The SPI is not formally checked for function**, only for "cannot break safety". Its
-  function is covered by simulation (read-back of every register, aborted frames).
-- **Functional coverage** uses a small custom collector, not a UVM/cocotb-coverage
+  after power-up; a board relies on the gate driver's enable or pull-downs.
+- **SPI** is formally checked only for "cannot break safety"; its function is checked in
+  simulation (read-back of every register, aborted frames).
+- **Functional coverage** uses a small custom collector, not a UVM or cocotb-coverage
   database.
-- No high-resolution PWM, no trip-zone or cycle-by-cycle current limit, no bootstrap
-  refresh at 100 % duty (see DESIGN.md §6).
 
-## 8. Reproduce
+## Next steps
 
-Requirements: Docker. Everything else is in the pinned image
-`hpretl/iic-osic-tools:2026.10` (about 4 GB download).
+- Asynchronous-assert, synchronous-deassert reset, which would use the flops' existing
+  `RESET_B` pins and make the outputs safe before the clock runs.
+- Hold uncertainty separate from setup, and no hold fixing on the high-fanout `at_zero_q`
+  net, to recover the 0.66 ns and most of the 22 % buffer area.
+- Gate-level simulation of the final netlist with SDF back-annotation.
+- Trip-zone style per-phase fault actions and a minimum off-time for bootstrap refresh
+  (DESIGN.md section 6).
+
+## Reproduce
+
+Requirements: Docker (Docker Desktop with the WSL 2 backend on Windows) and about 17 GB of
+disk for the image (4 GB download). Tool versions, including the IHP-Open-PDK commit
+`a49358cc`, are pinned by the image and recorded in
+[results/tool_versions.txt](results/tool_versions.txt).
 
 ```bash
-scripts/run_all.sh            # Linux/macOS: lint, sim, formal, full RTL-to-GDS flow, results
+scripts/run_all.sh                     # make all: lint sim coverage formal flow results
+scripts/run_all.sh sim                 # or one target: lint | sim | coverage | formal | flow | results
 ```
 
-```bash
-powershell -ExecutionPolicy Bypass -File scripts/run_all.ps1      # Windows (Docker Desktop)
-```
-
-Single steps: `scripts/run_all.sh lint|sim|formal|flow|results`.
-
-**Reproducibility check.** A fresh `git clone` of this repository ran `make all` inside the
-container with exit code 0 in **430 s** wall time, on a 16-thread laptop under Docker
-Desktop/WSL2 with the image already pulled. The LibreLane flow took 334 s of that. The
-regenerated implementation summary, the formal summary and both mutation tables were
-byte-identical to the committed ones, and so were the simulation results (8/8 tests,
-376,221 compared cycles, 39/39 coverage bins). Expect the first run after pulling the
-image to be slower, because of cold disk caches. Exact tool versions:
-[results/tool_versions.txt](results/tool_versions.txt) (IHP-Open-PDK commit
-`a49358cc`).
+On Windows use `powershell -ExecutionPolicy Bypass -File scripts\run_all.ps1 [target]`.
+On a 16-thread laptop under Docker Desktop, with the image already pulled, a fresh
+clone runs `make all` to exit code 0 in 11 to 14 minutes, of which the LibreLane flow
+takes 6 to 8. The regenerated implementation summary, formal summary, coverage
+reports and mutation tables match the committed ones.
 
 ## Repository layout
 
 ```
-SPEC.md            the contract (ports, registers, timing, verification requirements)
-DESIGN.md          micro-architecture, decisions, verification plan
-rtl/               synthesisable Verilog-2005 (+ formal properties under `ifdef FORMAL`)
-tb/                cocotb testbench + Python reference model
-formal/            SymbiYosys task files
-flow/              LibreLane configuration
-scripts/           one-command runner, mutation checks, result collection, rendering
-results/           committed evidence: logs, reports, coverage, GDS, layout PNG
+SPEC.md     the contract: ports, registers, timing, verification requirements
+DESIGN.md   micro-architecture, decisions, verification plan, timing closure
+rtl/        synthesisable Verilog-2005 (formal properties under `ifdef FORMAL`)
+tb/         cocotb testbench and Python reference model
+formal/     SymbiYosys task files
+flow/       LibreLane configuration, SDC, pin order
+scripts/    one-command runner, mutation checks, result collection, figures
+results/    committed evidence: logs, reports, coverage, final GDS and netlist
 ```
+
+The final GDS (1.9 MB) and gate-level netlist (0.3 MB) are committed on purpose: they
+are the deliverable the DRC, LVS and STA reports refer to. Full flow run directories are
+not committed (`flow/runs/` is ignored).
 
 ## License
 
-Code: MIT (see [LICENSE](LICENSE)). The IHP-Open-PDK and the tools in the container are
-licensed separately by their authors.
+MIT for the RTL, testbench, scripts and documentation ([LICENSE](LICENSE)). The GDS and
+layout images contain IHP-Open-PDK standard cells (Apache-2.0); see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
