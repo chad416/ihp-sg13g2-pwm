@@ -9,6 +9,11 @@ Structure
   * Pin checkers (independent of the model): no high/low overlap, dead time >=
                    programmed value, fault latency <= 3 cycles.
   * Coverage    -- functional coverage bins; the last test fails if any bin is empty.
+                   Configuration and event bins are sampled by the scoreboard from
+                   what the design actually did (active shadow registers, fault
+                   latch, output pins, SPI bit counter), not from what a test meant
+                   to do. Only the spi_read bins are sampled on the stimulus side;
+                   the read-back of every register is asserted in a directed test.
 """
 
 from __future__ import annotations
@@ -44,8 +49,8 @@ class Coverage:
             "handover low->high", "handover high->low", "pulse swallowed by dead time",
             "fault while high side on", "fault while low side on",
             "fault during dead time", "fault clear blocked (fault still active)",
-            "fault cleared by software", "atomic update with HOLD",
-            "compare update while running", "counter disabled while running",
+            "fault cleared by software", "atomic multi-register update (HOLD)",
+            "compare update while running", "counter disabled mid-period",
             "spi frame aborted",
         ],
         "spi_read": [f"0x{a:X}" for a in (A_CTRL, A_STATUS, A_PERIOD, A_CMPA, A_CMPB,
@@ -156,6 +161,10 @@ class Scoreboard:
         self.run_saw_h = [False, False, False]
         self.run_tainted = [False, False, False]
         self.trace: list[tuple[int, ...]] = []  # per-cycle pin record for figures
+        # coverage sampling state
+        self.cfg_key: tuple | None = None
+        self.hold_seen = False
+        self.spi_prev = (0, 0)  # (cs active, bit count) in the previous cycle
         self._task = None
 
     def _pins(self) -> tuple[int, int]:
@@ -191,6 +200,7 @@ class Scoreboard:
             await ReadOnly()
             m = self.model
             dt_before = m.dt_act
+            before = (m.en, m.cnt, m.fclr, m.flt_sync, m.latched, m.safe)
             pins = self._pins()
             exp = m.step(*pins, *bus_prev)
             self.cycles += 1
@@ -231,7 +241,52 @@ class Scoreboard:
                 if any(h) or any(l):
                     self._err(f"outputs not safe {FAULT_LATENCY} cycles after fault_i")
             self.prev_h, self.prev_l = h, l
+            self._sample_coverage(before, h, l)
             bus_prev = self._bus()
+
+    def _sample_coverage(self, before: tuple, h: list[int], l: list[int]) -> None:
+        """Coverage from observed behaviour; called once per cycle after the model step."""
+        m = self.model
+        en_b, cnt_b, fclr_b, flt_b, latched_b, safe_b = before
+        if m.rst:
+            self.cfg_key = None
+            return
+        # Configuration the counter actually runs with: sampled whenever the active
+        # (shadow) registers change while enabled, or when the counter is enabled.
+        key = (m.per_act, tuple(m.cmp_act), m.dt_act)
+        self.hold_seen = self.hold_seen or bool(m.hold)
+        if m.en and (key != self.cfg_key or not en_b):
+            COV.sample_config(m.per_act, list(m.cmp_act), m.dt_act)
+            if en_b and self.cfg_key is not None:
+                old = self.cfg_key
+                changed = (int(key[0] != old[0]) + sum(a != b for a, b in zip(key[1], old[1]))
+                           + int(key[2] != old[2]))
+                if key[1] != old[1]:
+                    COV.hit("event", "compare update while running")
+                if changed >= 2 and self.hold_seen:
+                    COV.hit("event", "atomic multi-register update (HOLD)")
+            self.hold_seen = bool(m.hold)
+        self.cfg_key = key if m.en else None
+        if en_b and not m.en and cnt_b != 0:
+            COV.hit("event", "counter disabled mid-period")
+        # Fault events: the synchronised fault arrives while the outputs were enabled;
+        # h/l are the pins formed just before it took effect.
+        if m.flt_sync and not safe_b:
+            if any(h):
+                COV.hit("event", "fault while high side on")
+            if any(l):
+                COV.hit("event", "fault while low side on")
+            if any(not (h[i] or l[i]) for i in range(3)):
+                COV.hit("event", "fault during dead time")
+        if fclr_b and flt_b:
+            COV.hit("event", "fault clear blocked (fault still active)")
+        if latched_b and not m.latched:
+            COV.hit("event", "fault cleared by software")
+        # SPI: chip select released in the middle of a frame.
+        spi = (int(self.dut.u_spi.cs_q.value), int(self.dut.u_spi.bitcnt_q.value))
+        if self.spi_prev[0] and not spi[0] and self.spi_prev[1] not in (0, 24):
+            COV.hit("event", "spi frame aborted")
+        self.spi_prev = spi
 
 
 # ============================================================================ helpers
@@ -266,7 +321,6 @@ def finish(sb: Scoreboard) -> None:
 
 async def configure(spi: SpiMaster, per: int, cmps: list[int], dt: int, ctrl: int,
                     atomic: bool = False) -> None:
-    COV.sample_config(per, cmps, dt)
     if atomic:
         await spi.write(A_CTRL, ctrl | CTRL_HOLD)
     await spi.write(A_PERIOD, per)
@@ -277,13 +331,6 @@ async def configure(spi: SpiMaster, per: int, cmps: list[int], dt: int, ctrl: in
 
 
 async def pulse_fault(dut, cycles: int) -> None:
-    h, l = int(dut.pwm_h_o.value), int(dut.pwm_l_o.value)
-    if h:
-        COV.hit("event", "fault while high side on")
-    if l:
-        COV.hit("event", "fault while low side on")
-    if (h | l) != 0b111:
-        COV.hit("event", "fault during dead time")
     await FallingEdge(dut.clk_i)
     dut.fault_i.value = 1
     await ClockCycles(dut.clk_i, cycles, rising=False)
@@ -329,7 +376,6 @@ async def test_register_access(dut):
     # aborted frame: CS released after 20 of 24 bits -> no write
     await spi.write(A_CMPA, 0x00AA)
     await spi.xfer(True, A_CMPA, 0x5555, abort_after=20)
-    COV.hit("event", "spi frame aborted")
     assert await spi.read(A_CMPA) == 0x00AA
     finish(sb)
 
@@ -373,7 +419,6 @@ async def test_shadow_and_hold(dut):
     await ClockCycles(dut.clk_i, 1000)
     # Non-atomic update while running (model checks the exact load cycle).
     await spi.write(A_CMPA, 120)
-    COV.hit("event", "compare update while running")
     await ClockCycles(dut.clk_i, 600)
     # Atomic update: nothing may change while HOLD=1, even across several valleys.
     await spi.write(A_CTRL, CTRL_EN | CTRL_OUTEN | CTRL_HOLD)
@@ -384,12 +429,10 @@ async def test_shadow_and_hold(dut):
     assert int(dut.u_tb.cmpa_q.value) == 120 and int(dut.u_tb.per_q.value) == 200, \
         "active registers changed while HOLD was set"
     await spi.write(A_CTRL, CTRL_EN | CTRL_OUTEN)
-    COV.hit("event", "atomic update with HOLD")
     await ClockCycles(dut.clk_i, 800)
     assert int(dut.u_tb.cmpa_q.value) == 10 and int(dut.u_tb.per_q.value) == 150
     # Disable the counter while running: outputs go to the low-side state cleanly.
     await spi.write(A_CTRL, CTRL_OUTEN)
-    COV.hit("event", "counter disabled while running")
     await ClockCycles(dut.clk_i, 300)
     finish(sb)
 
@@ -410,13 +453,11 @@ async def test_fault(dut):
     await FallingEdge(dut.clk_i)
     dut.fault_i.value = 1
     await spi.write(A_CTRL, CTRL_EN | CTRL_OUTEN | CTRL_FCLR)
-    COV.hit("event", "fault clear blocked (fault still active)")
     assert (await spi.read(A_STATUS)) & 1
     dut.fault_i.value = 0
     await ClockCycles(dut.clk_i, 20)
     assert (await spi.read(A_STATUS)) & 1, "latch must hold after the fault goes away"
     await spi.write(A_CTRL, CTRL_EN | CTRL_OUTEN | CTRL_FCLR)
-    COV.hit("event", "fault cleared by software")
     assert (await spi.read(A_STATUS)) & 1 == 0
     await ClockCycles(dut.clk_i, 400)
     assert int(dut.pwm_h_o.value) | int(dut.pwm_l_o.value), "outputs did not recover"
@@ -425,7 +466,7 @@ async def test_fault(dut):
 
 @cocotb.test()
 async def test_edge_cases(dut):
-    """P=0, P=1, C=0, C>=P, DT=0 (clamped to 1), DT longer than the pulse, huge period."""
+    """P=0, P=1, C=0, C>=P, DT=0 (clamped to 1), DT longer than the pulse, P = 0xFFFF."""
     spi, sb = await start(dut)
     cases = [
         (0, [0, 5, 0xFFFF], 2, 300),
@@ -435,6 +476,7 @@ async def test_edge_cases(dut):
         (40, [3, 20, 37], 30, 800),       # 2*C-DT < 0 for phase A -> swallowed
         (400, [100, 250, 399], 300, 4 * 400),  # long dead time (IGBT-like 3 us)
         (5000, [1250, 2500, 4999], 1023, 2 * 2 * 5000 + 200),
+        (0xFFFF, [1, 0x8000, 0xFFFF], 5, 2 * 0xFFFF + 400),  # full counter range
     ]
     for per, cmps, dt, run in cases:
         await configure(spi, per, cmps, dt, CTRL_EN | CTRL_OUTEN, atomic=True)
@@ -467,19 +509,13 @@ async def test_random(dut):
         dt = rand_dt(per)
         atomic = rng.random() < 0.4
         await configure(spi, per, cmps, dt, ctrl, atomic=atomic)
-        if atomic:
-            COV.hit("event", "atomic update with HOLD")
-        else:
-            COV.hit("event", "compare update while running")
         await ClockCycles(dut.clk_i, rng.randint(2 * per, 6 * per + 50))
         if rng.random() < 0.25:
             await pulse_fault(dut, rng.randint(2, 20))
             await ClockCycles(dut.clk_i, rng.randint(5, 50))
             await spi.write(A_CTRL, ctrl | CTRL_FCLR)
-            COV.hit("event", "fault cleared by software")
         if rng.random() < 0.05:
             await spi.write(A_CTRL, CTRL_OUTEN)
-            COV.hit("event", "counter disabled while running")
             await ClockCycles(dut.clk_i, rng.randint(10, 100))
         if k % 10 == 0:
             await spi.read(rng.choice([A_STATUS, A_CNT, A_CTRL]))
