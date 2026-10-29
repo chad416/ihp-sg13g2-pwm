@@ -192,10 +192,3 @@ class Pwm3Model:
         self.rst_sync, self.rst_meta = self.rst_meta, int(rst_ni)
         self.flt_sync, self.flt_meta = self.flt_meta, int(fault_i)
         return self.outputs()
-
-
-def expected_duty(per: int, cmp: int) -> float:
-    """Ideal high-side reference duty for compare `cmp` and period `per` (SPEC 5)."""
-    if per == 0:
-        return 0.0
-    return min(cmp, per) / per
