@@ -35,10 +35,16 @@ rows = [
     ("Core utilisation", fmt(get("design__instance__utilization"), "", 3)),
     ("Instances (total)", fmt(get("design__instance__count"))),
     ("Std cells", fmt(get("design__instance__count__stdcell"))),
-    ("Setup WNS (worst corner)", fmt(get("timing__setup__ws"), " ns")),
-    ("Hold WNS (worst corner)", fmt(get("timing__hold__ws"), " ns")),
+    ("Setup worst slack (all corners)", fmt(get("timing__setup__ws"), " ns")),
+    ("Hold worst slack (all corners)", fmt(get("timing__hold__ws"), " ns")),
+    ("Setup WNS / TNS", f"{fmt(get('timing__setup__wns'), ' ns')} / "
+                        f"{fmt(get('timing__setup__tns'), ' ns')}"),
+    ("Hold WNS / TNS", f"{fmt(get('timing__hold__wns'), ' ns')} / "
+                       f"{fmt(get('timing__hold__tns'), ' ns')}"),
     ("Setup violations", fmt(get("timing__setup_vio__count"))),
     ("Hold violations", fmt(get("timing__hold_vio__count"))),
+    ("Flip-flops", fmt(get("design__instance__count__class:sequential_cell"))),
+    ("Hold buffers inserted", fmt(get("design__instance__count__hold_buffer"))),
     ("Max slew / cap / fanout violations",
      f"{fmt(get('design__max_slew_violation__count'))} / "
      f"{fmt(get('design__max_cap_violation__count'))} / "
@@ -64,14 +70,19 @@ for k, v in rows:
 # Per-corner setup/hold slack and the f_max it implies
 corners = sorted({k.split("corner:")[1] for k in m if "timing__setup__ws__corner:" in k})
 if corners:
-    print("\n| Corner | Setup WS (ns) | Hold WS (ns) | Critical path (ns) | f_max estimate (MHz) |")
-    print("|---|---|---|---|---|")
+    print("\n| Corner | Setup WS (ns) | Setup TNS (ns) | Hold WS (ns) | Hold TNS (ns) "
+          "| Critical path (ns) | f_max estimate (MHz) |")
+    print("|---|---|---|---|---|---|---|")
     for c in corners:
         s = m.get(f"timing__setup__ws__corner:{c}")
         h = m.get(f"timing__hold__ws__corner:{c}")
         if s is None:
             continue
+        st = m.get(f"timing__setup__tns__corner:{c}")
+        ht = m.get(f"timing__hold__tns__corner:{c}")
         crit = period - s
-        print(f"| {c} | {s:.3f} | {fmt(h)} | {crit:.3f} | {1000 / crit:.0f} |")
-    print("\nf_max estimate = 1 / (T_clk - worst setup slack) per corner, from the run "
-          "constrained at the clock above; it is an estimate, not a separate run.")
+        print(f"| {c} | {s:.3f} | {fmt(st)} | {fmt(h)} | {fmt(ht)} | {crit:.3f} "
+              f"| {1000 / crit:.0f} |")
+    print("\nWS = worst slack, TNS = total negative slack (0 when no path fails). "
+          "f_max estimate = 1 / (T_clk - setup WS) per corner, from the run constrained "
+          "at the clock above; it is an estimate, not a separate run.")
