@@ -22,6 +22,7 @@ all: versions lint sim coverage formal flow results
 # screenshots/figures only (needs results/sim/traces from 'make sim' and results/impl from 'make results')
 figures:
 	python3 scripts/make_figures.py
+	python3 scripts/compress_png.py docs/screenshots/*.png $(RES)/layout_pwm3_top.png
 
 versions:
 	@mkdir -p $(RES)
@@ -54,7 +55,7 @@ flow:
 
 results:
 	bash scripts/collect_results.sh
-	python3 scripts/make_figures.py
+	$(MAKE) figures
 
 clean:
 	rm -rf tb/sim_build tb/sim_build_verilator tb/sim_build_verilator.log tb/coverage.dat tb/results.xml tb/__pycache__ formal/pwm_deadtime formal/pwm_deadtime_* formal/pwm3_top formal/pwm3_top_* flow/runs

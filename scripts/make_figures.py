@@ -122,13 +122,17 @@ def fig_fault() -> None:
 
 
 def terminal(name: str, title: str, files: list[tuple[str, str]], max_lines: int = 60) -> None:
-    """Render report files as a terminal-style image (text copied verbatim)."""
+    """Render report files as a terminal-style image (text copied verbatim).
+
+    A label replaces the default "cat <file>" header line; a label starting with
+    "head" also limits the file to its first 12 lines.
+    """
     lines = [f"$ {title}"]
     for label, rel in files:
         lines.append("")
         lines.append(f"$ cat {rel}" if not label else f"$ {label}")
         text = (ROOT / rel).read_text(encoding="utf-8", errors="replace").splitlines()
-        lines += text[:max_lines]
+        lines += text[:12 if label.startswith("head") else max_lines]
     width = max(len(s) for s in lines)
     fig = plt.figure(figsize=(max(8, width * 0.075), 0.19 * len(lines) + 0.6))
     fig.patch.set_facecolor("#1e1e1e")
@@ -146,8 +150,10 @@ def main() -> None:
              [("", "results/formal/summary.txt"), ("", "results/formal/mutation.txt")])
     terminal("term_sim.png", "make sim   # cocotb regression, coverage, mutation check",
              [("", "results/sim/summary.txt"), ("", "results/sim/mutation.txt")])
-    terminal("term_coverage.png", "functional coverage report",
-             [("", "results/sim/coverage_report.txt")], max_lines=70)
+    terminal("term_coverage.png", "make sim && make coverage   # functional + code coverage",
+             [("", "results/sim/coverage_report.txt"),
+              ("head -n 12 results/sim/code_coverage.txt", "results/sim/code_coverage.txt")],
+             max_lines=70)
     terminal("term_sta_signoff.png", "make flow && make results   # post-route multi-corner STA + signoff",
              [("", "results/impl/sta/summary.rpt"), ("", "results/impl/summary.md")])
     terminal("term_lvs.png", "Netgen LVS (tail of the report)",

@@ -59,9 +59,9 @@ SHOTS="$ROOT/docs/screenshots"
 mkdir -p "$SHOTS"
 LYP="$PDK_ROOT/ihp-sg13g2/libs.tech/klayout/tech/sg13g2.lyp"
 klayout -b -r "$ROOT/scripts/render_gds.py" -rd gds="$OUT/final/pwm3_top.gds" \
-  -rd png="$ROOT/results/layout_pwm3_top.png" -rd lyp="$LYP" -rd width=2000
+  -rd png="$ROOT/results/layout_pwm3_top.png" -rd lyp="$LYP" -rd width=1400
 klayout -b -r "$ROOT/scripts/render_gds.py" -rd gds="$OUT/final/pwm3_top.gds" \
-  -rd png="$SHOTS/layout_detail_40x40um.png" -rd lyp="$LYP" -rd width=1600 -rd box=110,120,150,160
+  -rd png="$SHOTS/layout_detail_40x40um.png" -rd lyp="$LYP" -rd width=1200 -rd box=110,120,150,160
 cp "$RUN/final/render/pwm3_top.png" "$SHOTS/layout_librelane_render.png" 2>/dev/null || true
 
 python3 "$ROOT/scripts/summarize_impl.py" "$OUT" | tee "$OUT/summary.md"
