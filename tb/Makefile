@@ -1,6 +1,8 @@
-# cocotb simulation of pwm3_top (Icarus Verilog).
-#   make            -- run all tests
+# cocotb simulation of pwm3_top.
+#   make                                    -- all tests on Icarus Verilog
 #   make PWM3_SEED=1 PWM3_RANDOM_CFGS=500   -- other seed / longer random run
+#   make SIM=verilator SIM_BUILD=sim_build_verilator   -- same tests on Verilator
+# Code coverage (Verilator line/branch/toggle): 'make coverage' in ../Makefile.
 
 SIM ?= icarus
 TOPLEVEL_LANG = verilog
@@ -17,7 +19,9 @@ COCOTB_TEST_MODULES = test_pwm3
 TOPLEVEL = pwm3_top
 MODULE = test_pwm3
 
+ifeq ($(SIM),icarus)
 COMPILE_ARGS += -g2012 -Wall
+endif
 WAVES ?= 0
 
 export PWM3_SEED ?= 20261028
