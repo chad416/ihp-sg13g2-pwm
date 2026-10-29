@@ -33,9 +33,13 @@ for m in "${MUTANTS[@]}"; do
     res="ERROR (mutation did not apply)"; rc=1
   else
     (cd "$d/tb" && make SIM=icarus PWM3_RANDOM_CFGS=20 PWM3_COV_REPORT="$d/cov.txt" >"$d/sim.log" 2>&1)
-    nfail=$(grep -o 'FAIL=[0-9]*' "$d/sim.log" | tail -1 | cut -d= -f2)
-    if [[ -n "$nfail" && "$nfail" -gt 0 ]]; then
-      first=$(grep -oE 'test_pwm3\.test_[a-z_]+ +FAIL' "$d/sim.log" | head -1 | awk '{print $1}')
+    # The coverage-closure test is not a checker (a shorter random run can leave
+    # bins empty), so it never counts as killing a mutant.
+    failed=$(grep -oE 'test_pwm3\.test_[a-z_]+ +FAIL' "$d/sim.log" | awk '{print $1}' |
+             grep -v 'test_zz_coverage_closure' || true)
+    nfail=$(printf '%s' "$failed" | grep -c . || true)
+    if [[ "$nfail" -gt 0 ]]; then
+      first=$(printf '%s\n' "$failed" | head -1)
       res="killed ($nfail failing tests, first: ${first#test_pwm3.})"
     else
       res="SURVIVED"; rc=1
